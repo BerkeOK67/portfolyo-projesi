@@ -1,0 +1,22 @@
+{
+    "projeler": [
+      {
+        "id": 1,
+        "isim": "Adım Test Portfolyo",
+        "aciklama": "Frontend yeteneklerimi sergilediğim kişisel web projem. Modern tasarım ve responsive yapı.",
+        "kapakFotografi": "https://firebasestorage.googleapis.com/v0/b/portfolyo-projesi-9f34a.firebasestorage.app/o/adimtest-kapak.png?alt=media",
+        "canliLink": "https://adimtest.onrender.com",
+        "githubLink": "https://github.com/BerkeOK67/adimtest",
+        "teknolojiler": ["HTML", "CSS", "JavaScript"]
+      },
+      {
+        "id": 2,
+        "isim": "Kişisel Muhasebe Uygulaması",
+        "aciklama": "Flask + Firebase ile geliştirilmiş kişisel finans yönetim uygulaması. Gelir/gider takibi ve taksit yönetimi.",
+        "kapakFotografi": "https://firebasestorage.googleapis.com/v0/b/portfolyo-projesi-9f34a.firebasestorage.app/o/muhasebe-kapak.png?alt=media",
+        "canliLink": "",
+        "githubLink": "https://github.com/BerkeOK67/muhasebeAPP",
+        "teknolojiler": ["Python", "Flask", "Firebase", "JavaScript"]
+      }
+    ]
+  }
