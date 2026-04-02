@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iletisim - Berke OK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">Berke OK</a>
+            <nav>
+                <a href="index.html">Anasayfa</a>
+                <a href="projeler.html">Projeler</a>
+                <a href="hakkimda.html">Hakkimda</a>
+                <a href="iletisim.html" class="active">Iletisim</a>
+            </nav>
+            <div class="social-links" id="social-links">
+                <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>Iletisim</h1>
+        <p>Benimle iletisime gecmek icin asagidaki kanallari kullanabilirsiniz</p>
+    </div>
+
+    <!-- Contact Content -->
+    <section class="section">
+        <div class="contact-content">
+            <div class="contact-info" id="contact-info">
+                <h3>Iletisim Bilgileri</h3>
+                <div class="loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>Yukleniyor...</p>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <h3 style="margin-bottom: 1.5rem; color: #e4e4e7;">Mesaj Gonder</h3>
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Adiniz</label>
+                        <input type="text" id="name" name="name" required placeholder="Adinizi girin">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">E-posta</label>
+                        <input type="email" id="email" name="email" required placeholder="E-posta adresinizi girin">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Konu</label>
+                        <input type="text" id="subject" name="subject" required placeholder="Mesaj konusu">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Mesajiniz</label>
+                        <textarea id="message" name="message" required placeholder="Mesajinizi yazin..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn" style="width: 100%;">
+                        <i class="fas fa-paper-plane"></i> Gonder
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Berke OK. Tum haklari saklidir.</p>
+    </footer>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <script>
+        // EmailJS'i baslat
+        emailjs.init("jZer9akld25gePu5L");
+        document.addEventListener('DOMContentLoaded', () => {
+            const contactInfo = document.getElementById('contact-info');
+            
+            database.ref('iletisim').once('value', (snapshot) => {
+                const data = snapshot.val();
+                
+                let html = '<h3>Iletisim Bilgileri</h3>';
+                
+                if (!data) {
+                    html += '<p style="color: #a1a1aa;">Iletisim bilgisi henuz eklenmemis.</p>';
+                    contactInfo.innerHTML = html;
+                    return;
+                }
+                
+                // E-posta
+                if (data.email) {
+                    html += `
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h4>E-posta</h4>
+                                <a href="mailto:${data.email}">${data.email}</a>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Telefon
+                if (data.telefon) {
+                    html += `
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h4>Telefon</h4>
+                                <a href="tel:${data.telefon}">${data.telefon}</a>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // GitHub
+                if (data.github) {
+                    html += `
+                        <div class="contact-item">
+                            <i class="fab fa-github"></i>
+                            <div>
+                                <h4>GitHub</h4>
+                                <a href="${data.github}" target="_blank">${data.github.replace('https://', '')}</a>
+                            </div>
+                        </div>
+                    `;
+                    // Header link
+                    const headerGithub = document.querySelector('.social-links a:first-child');
+                    if (headerGithub) headerGithub.href = data.github;
+                }
+                
+                // LinkedIn
+                if (data.linkedin) {
+                    html += `
+                        <div class="contact-item">
+                            <i class="fab fa-linkedin"></i>
+                            <div>
+                                <h4>LinkedIn</h4>
+                                <a href="${data.linkedin}" target="_blank">${data.linkedin.replace('https://', '')}</a>
+                            </div>
+                        </div>
+                    `;
+                    // Header link
+                    const headerLinkedin = document.querySelector('.social-links a:last-child');
+                    if (headerLinkedin) headerLinkedin.href = data.linkedin;
+                }
+                
+                // Twitter
+                if (data.twitter) {
+                    html += `
+                        <div class="contact-item">
+                            <i class="fab fa-twitter"></i>
+                            <div>
+                                <h4>Twitter / X</h4>
+                                <a href="${data.twitter}" target="_blank">${data.twitter.replace('https://', '')}</a>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Instagram
+                if (data.instagram) {
+                    html += `
+                        <div class="contact-item">
+                            <i class="fab fa-instagram"></i>
+                            <div>
+                                <h4>Instagram</h4>
+                                <a href="${data.instagram}" target="_blank">${data.instagram.replace('https://', '')}</a>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Website
+                if (data.website) {
+                    html += `
+                        <div class="contact-item">
+                            <i class="fas fa-globe"></i>
+                            <div>
+                                <h4>Website</h4>
+                                <a href="${data.website}" target="_blank">${data.website.replace('https://', '')}</a>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Konum
+                if (data.konum) {
+                    html += `
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h4>Konum</h4>
+                                <p>${data.konum}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                contactInfo.innerHTML = html;
+                
+                // Header sosyal medya linklerini guncelle
+                const socialLinks = document.getElementById('social-links');
+                let socialHtml = '';
+                if (data.github) socialHtml += `<a href="${data.github}" target="_blank"><i class="fab fa-github"></i></a>`;
+                if (data.linkedin) socialHtml += `<a href="${data.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>`;
+                if (data.twitter) socialHtml += `<a href="${data.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
+                if (data.instagram) socialHtml += `<a href="${data.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+                if (socialHtml) socialLinks.innerHTML = socialHtml;
+            });
+        });
+        
+        document.getElementById('contact-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gonderiliyor...';
+            
+            try {
+                // EmailJS ile mail gonder
+                const templateParams = {
+                    from_name: document.getElementById('name').value,
+                    from_email: document.getElementById('email').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value
+                };
+                
+                await emailjs.send('service_god4ynl', 'template_8eaxgr4', templateParams);
+                
+                // Basari mesaji goster
+                showNotification('Mesajiniz basariyla gonderildi!', 'success');
+                this.reset();
+                
+            } catch (error) {
+                showNotification('Bir hata olustu. Lutfen tekrar deneyin.', 'error');
+                console.error('EmailJS Error:', error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+        
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = 'notification ' + type;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('fade-out');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

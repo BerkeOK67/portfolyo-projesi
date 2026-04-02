@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Portfolyo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-box">
+            <h1><i class="fas fa-lock"></i> Admin Girisi</h1>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">E-posta</label>
+                    <input type="email" id="email" required placeholder="admin@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Sifre</label>
+                    <input type="password" id="password" required placeholder="********">
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">
+                    <i class="fas fa-sign-in-alt"></i> Giris Yap
+                </button>
+                <p id="login-error" class="error-message"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="admin-panel" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-cog"></i> Admin Panel</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item" data-section="projects">
+                    <i class="fas fa-project-diagram"></i> Projeler
+                </a>
+                <a href="#" class="nav-item" data-section="about">
+                    <i class="fas fa-user"></i> Hakkimda
+                </a>
+                <a href="#" class="nav-item" data-section="contact">
+                    <i class="fas fa-envelope"></i> Iletisim
+                </a>
+                <a href="#" class="nav-item" data-section="settings">
+                    <i class="fas fa-cogs"></i> Ayarlar
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../index.html" target="_blank" class="nav-item">
+                    <i class="fas fa-external-link-alt"></i> Siteyi Gor
+                </a>
+                <button id="logout-btn" class="nav-item logout">
+                    <i class="fas fa-sign-out-alt"></i> Cikis Yap
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <h1>Dashboard</h1>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-project-diagram"></i>
+                        <div>
+                            <h3 id="total-projects">0</h3>
+                            <p>Toplam Proje</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-star"></i>
+                        <div>
+                            <h3 id="featured-projects">0</h3>
+                            <p>One Cikan</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-images"></i>
+                        <div>
+                            <h3 id="total-images">0</h3>
+                            <p>Gorsel</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="quick-actions">
+                    <h2>Hizli Islemler</h2>
+                    <button class="btn" onclick="showSection('projects'); openProjectModal();">
+                        <i class="fas fa-plus"></i> Yeni Proje Ekle
+                    </button>
+                    <button class="btn btn-outline" onclick="showSection('about')">
+                        <i class="fas fa-edit"></i> Hakkimda Duzenle
+                    </button>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects-section" class="content-section">
+                <div class="section-header">
+                    <h1>Projeler</h1>
+                    <button class="btn" onclick="openProjectModal()">
+                        <i class="fas fa-plus"></i> Yeni Proje
+                    </button>
+                </div>
+                <div id="projects-list" class="projects-list">
+                    <div class="loading">
+                        <i class="fas fa-spinner"></i>
+                        <p>Projeler yukleniyor...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about-section" class="content-section">
+                <div class="section-header">
+                    <h1>Hakkimda Duzenle</h1>
+                    <button class="btn" onclick="saveAbout()">
+                        <i class="fas fa-save"></i> Kaydet
+                    </button>
+                </div>
+                <div class="about-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Profil Fotografi</label>
+                            <div class="image-upload-box" id="profile-image-box">
+                                <img id="profile-preview" src="" alt="Profil">
+                                <input type="file" id="profile-image" accept="image/*" onchange="previewProfileImage(this)">
+                                <label for="profile-image" class="upload-label">
+                                    <i class="fas fa-camera"></i> Degistir
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="about-title">Baslik</label>
+                        <input type="text" id="about-title" placeholder="Ben Kimim?">
+                    </div>
+                    <div class="form-group">
+                        <label for="about-bio">Biyografi</label>
+                        <textarea id="about-bio" rows="5" placeholder="Kendinizi tanitin..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="about-bio2">Ek Bilgi</label>
+                        <textarea id="about-bio2" rows="3" placeholder="Ek bilgiler..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="about-education">Egitim</label>
+                        <input type="text" id="about-education" placeholder="Universite - Bolum">
+                    </div>
+                    <div class="form-group">
+                        <label for="about-education-years">Egitim Yillari</label>
+                        <input type="text" id="about-education-years" placeholder="2020 - 2024">
+                    </div>
+                    
+                    <h3 style="margin-top: 2rem;">Yetenekler</h3>
+                    <div id="skills-container" class="skills-container">
+                        <!-- Skills will be loaded here -->
+                    </div>
+                    <button type="button" class="btn btn-outline" onclick="addSkillField()">
+                        <i class="fas fa-plus"></i> Yetenek Ekle
+                    </button>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact-section" class="content-section">
+                <div class="section-header">
+                    <h1>Iletisim Bilgileri</h1>
+                    <button class="btn" onclick="saveContact()">
+                        <i class="fas fa-save"></i> Kaydet
+                    </button>
+                </div>
+                <div class="contact-form-admin">
+                    <h3>Iletisim Bilgileri</h3>
+                    <div class="form-group">
+                        <label for="contact-email-info">E-posta Adresi</label>
+                        <input type="email" id="contact-email-info" placeholder="ornek@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-phone">Telefon (opsiyonel)</label>
+                        <input type="tel" id="contact-phone" placeholder="+90 555 123 4567">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-location">Konum</label>
+                        <input type="text" id="contact-location" placeholder="Istanbul, Turkiye">
+                    </div>
+                    
+                    <h3 style="margin-top: 2rem;">Sosyal Medya Linkleri</h3>
+                    <div class="form-group">
+                        <label for="contact-github"><i class="fab fa-github"></i> GitHub</label>
+                        <input type="url" id="contact-github" placeholder="https://github.com/kullaniciadi">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-linkedin"><i class="fab fa-linkedin"></i> LinkedIn</label>
+                        <input type="url" id="contact-linkedin" placeholder="https://linkedin.com/in/kullaniciadi">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-twitter"><i class="fab fa-twitter"></i> Twitter / X</label>
+                        <input type="url" id="contact-twitter" placeholder="https://twitter.com/kullaniciadi">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-instagram"><i class="fab fa-instagram"></i> Instagram</label>
+                        <input type="url" id="contact-instagram" placeholder="https://instagram.com/kullaniciadi">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-website"><i class="fas fa-globe"></i> Kisisel Website</label>
+                        <input type="url" id="contact-website" placeholder="https://benimsite.com">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="content-section">
+                <h1>Ayarlar</h1>
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label for="site-title">Site Basligi</label>
+                        <input type="text" id="site-title" placeholder="Berke OK - Portfolyo">
+                    </div>
+                    <div class="form-group">
+                        <label for="github-url">GitHub URL</label>
+                        <input type="url" id="github-url" placeholder="https://github.com/username">
+                    </div>
+                    <div class="form-group">
+                        <label for="linkedin-url">LinkedIn URL</label>
+                        <input type="url" id="linkedin-url" placeholder="https://linkedin.com/in/username">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-email">E-posta</label>
+                        <input type="email" id="contact-email" placeholder="email@example.com">
+                    </div>
+                    <button class="btn" onclick="saveSettings()">
+                        <i class="fas fa-save"></i> Ayarlari Kaydet
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Project Modal -->
+    <div class="modal-overlay" id="project-modal">
+        <div class="modal admin-modal">
+            <button class="modal-close" onclick="closeProjectModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-content">
+                <h2 id="project-modal-title">Yeni Proje</h2>
+                <form id="project-form">
+                    <input type="hidden" id="project-id">
+                    
+                    <div class="form-group">
+                        <label for="project-name">Proje Adi *</label>
+                        <input type="text" id="project-name" required placeholder="Proje adi">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="project-description">Kisa Aciklama *</label>
+                        <textarea id="project-description" rows="2" required placeholder="Kart uzerinde gorunecek kisa aciklama"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="project-details">Detayli Aciklama</label>
+                        <textarea id="project-details" rows="4" placeholder="Modal'da gorunecek detayli aciklama"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="project-features">Ozellikler (her satira bir ozellik)</label>
+                        <textarea id="project-features" rows="4" placeholder="Ozellik 1&#10;Ozellik 2&#10;Ozellik 3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="project-technologies">Teknolojiler (virgul ile ayirin)</label>
+                        <input type="text" id="project-technologies" placeholder="React, Node.js, Firebase">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="project-github">GitHub Link</label>
+                            <input type="url" id="project-github" placeholder="https://github.com/...">
+                        </div>
+                        <div class="form-group">
+                            <label for="project-live">Canli Link</label>
+                            <input type="url" id="project-live" placeholder="https://...">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="project-featured"> One Cikan Proje
+                        </label>
+                    </div>
+                    
+                    <!-- Image Upload Section -->
+                    <div class="form-group">
+                        <label>Proje Gorselleri</label>
+                        <div class="image-upload-area" id="image-upload-area">
+                            <input type="file" id="project-images" multiple accept="image/*" onchange="handleImageUpload(this)">
+                            <label for="project-images" class="upload-placeholder">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Gorselleri surukleyin veya tiklayin</p>
+                                <small>Birden fazla gorsel secebilirsiniz</small>
+                            </label>
+                        </div>
+                        <div id="image-preview-container" class="image-preview-container"></div>
+                        <p class="help-text"><i class="fas fa-info-circle"></i> Ilk gorsel veya sectiginiz gorsel kapak fotografi olacak</p>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="closeProjectModal()">Iptal</button>
+                        <button type="submit" class="btn">
+                            <i class="fas fa-save"></i> Kaydet
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

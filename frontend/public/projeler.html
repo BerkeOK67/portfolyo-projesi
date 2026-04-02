@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Berke OK - Portfolyo</title>
+    <title>Projelerim - Berke OK</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -14,8 +14,8 @@
         <div class="header-content">
             <a href="index.html" class="logo">Berke OK</a>
             <nav>
-                <a href="index.html" class="active">Anasayfa</a>
-                <a href="projeler.html">Projeler</a>
+                <a href="index.html">Anasayfa</a>
+                <a href="projeler.html" class="active">Projeler</a>
                 <a href="hakkimda.html">Hakkimda</a>
                 <a href="iletisim.html">Iletisim</a>
             </nav>
@@ -26,30 +26,19 @@
         </div>
     </header>
 
-    <!-- Hero -->
-    <section class="hero">
-        <h1>Merhaba, Ben Berke</h1>
-        <p>Full-stack gelistirici olarak modern web teknolojileri ve bulut servisleri ile projeler gelistiriyorum.</p>
-        <div class="hero-tags">
-            <span>Python</span>
-            <span>Flask</span>
-            <span>React</span>
-            <span>AWS</span>
-            <span>Firebase</span>
-        </div>
-    </section>
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>Projelerim</h1>
+        <p>Gelistirdigim tum projeler. Detaylar icin proje kartina tiklayin.</p>
+    </div>
 
-    <!-- Featured Projects -->
-    <section class="section" id="projects">
-        <h2 class="section-title">One Cikan Projeler</h2>
-        <div id="featured-projects" class="projects-grid">
+    <!-- All Projects -->
+    <section class="section">
+        <div id="all-projects" class="projects-grid">
             <div class="loading">
                 <i class="fas fa-spinner"></i>
                 <p>Projeler yukleniyor...</p>
             </div>
-        </div>
-        <div class="section-footer">
-            <a href="projeler.html" class="btn">Tum Projeleri Gor <i class="fas fa-arrow-right"></i></a>
         </div>
     </section>
 
@@ -66,10 +55,10 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const grid = document.getElementById('featured-projects');
+            const grid = document.getElementById('all-projects');
             
             // Projeleri yukle
-            getFeaturedProjects((projects) => {
+            getProjects((projects) => {
                 if (projects.length === 0) {
                     grid.innerHTML = '<div class="loading"><p>Henuz proje eklenmemis.</p></div>';
                     return;

@@ -1,22 +1,57 @@
 {
-    "projeler": [
-      {
-        "id": 1,
-        "isim": "Adım Test Portfolyo",
-        "aciklama": "Frontend yeteneklerimi sergilediğim kişisel web projem. Modern tasarım ve responsive yapı.",
-        "kapakFotografi": "https://firebasestorage.googleapis.com/v0/b/portfolyo-projesi-9f34a.firebasestorage.app/o/adimtest-kapak.png?alt=media",
-        "canliLink": "https://adimtest.onrender.com",
-        "githubLink": "https://github.com/BerkeOK67/adimtest",
-        "teknolojiler": ["HTML", "CSS", "JavaScript"]
-      },
-      {
-        "id": 2,
-        "isim": "Kişisel Muhasebe Uygulaması",
-        "aciklama": "Flask + Firebase ile geliştirilmiş kişisel finans yönetim uygulaması. Gelir/gider takibi ve taksit yönetimi.",
-        "kapakFotografi": "https://firebasestorage.googleapis.com/v0/b/portfolyo-projesi-9f34a.firebasestorage.app/o/muhasebe-kapak.png?alt=media",
-        "canliLink": "",
-        "githubLink": "https://github.com/BerkeOK67/muhasebeAPP",
-        "teknolojiler": ["Python", "Flask", "Firebase", "JavaScript"]
-      }
-    ]
-  }
+  "projeler": [
+    {
+      "id": 1,
+      "isim": "Adım Test Portfolyo",
+      "aciklama": "Frontend yeteneklerimi sergilediğim kişisel web projem.",
+      "detaylar": "Bu proje, modern web teknolojilerini kullanarak geliştirdiğim kişisel portfolyo sitesidir. Responsive tasarım, animasyonlar ve kullanıcı dostu arayüz ile ziyaretçilere etkileyici bir deneyim sunuyor.",
+      "ozellikler": [
+        "Responsive tasarım (mobil uyumlu)",
+        "Modern ve şık arayüz",
+        "Hızlı yükleme süreleri",
+        "SEO optimizasyonu"
+      ],
+      "kapakFotografi": "https://firebasestorage.googleapis.com/v0/b/portfolyo-projesi-9f34a.firebasestorage.app/o/adimtest-kapak.png?alt=media",
+      "canliLink": "https://adimtest.onrender.com",
+      "githubLink": "https://github.com/BerkeOK67/adimtest",
+      "teknolojiler": ["HTML", "CSS", "JavaScript"],
+      "oneCikan": true
+    },
+    {
+      "id": 2,
+      "isim": "Kişisel Muhasebe Uygulaması",
+      "aciklama": "Flask + Firebase ile geliştirilmiş kişisel finans yönetim uygulaması.",
+      "detaylar": "Gelir ve gider takibi yapabileceğiniz, taksitli ödemelerinizi yönetebileceğiniz kapsamlı bir finans uygulaması. Firebase Realtime Database ile gerçek zamanlı veri senkronizasyonu sağlıyor.",
+      "ozellikler": [
+        "Gelir/gider takibi",
+        "Taksit yönetimi",
+        "Alacak takibi",
+        "Finansal analiz grafikleri",
+        "Gerçek zamanlı senkronizasyon"
+      ],
+      "kapakFotografi": "https://firebasestorage.googleapis.com/v0/b/portfolyo-projesi-9f34a.firebasestorage.app/o/muhasebe-kapak.png?alt=media",
+      "canliLink": "",
+      "githubLink": "https://github.com/BerkeOK67/muhasebeAPP",
+      "teknolojiler": ["Python", "Flask", "Firebase", "JavaScript", "HTML/CSS"],
+      "oneCikan": true
+    },
+    {
+      "id": 3,
+      "isim": "Portfolyo Projesi",
+      "aciklama": "AWS ve Firebase altyapılı full-stack portfolyo web sitesi.",
+      "detaylar": "Bu portfolyo sitesi, projelerimi sergilemek için geliştirdiğim full-stack bir uygulamadır. Firebase Realtime Database ile dinamik içerik yönetimi, Firebase Storage ile görsel depolama sağlıyor.",
+      "ozellikler": [
+        "Firebase Realtime Database entegrasyonu",
+        "Firebase Storage ile görsel yönetimi",
+        "Responsive tasarım",
+        "Proje detay modal penceresi",
+        "Dinamik içerik yönetimi"
+      ],
+      "kapakFotografi": "https://firebasestorage.googleapis.com/v0/b/portfolyo-projesi-9f34a.firebasestorage.app/o/portfolyo-kapak.png?alt=media",
+      "canliLink": "",
+      "githubLink": "https://github.com/BerkeOK67/portfolyo-projesi",
+      "teknolojiler": ["HTML", "CSS", "JavaScript", "Firebase", "AWS"],
+      "oneCikan": true
+    }
+  ]
+}

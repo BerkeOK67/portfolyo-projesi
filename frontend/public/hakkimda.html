@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hakkimda - Berke OK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">Berke OK</a>
+            <nav>
+                <a href="index.html">Anasayfa</a>
+                <a href="projeler.html">Projeler</a>
+                <a href="hakkimda.html" class="active">Hakkimda</a>
+                <a href="iletisim.html">Iletisim</a>
+            </nav>
+            <div class="social-links" id="social-links">
+                <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>Hakkimda</h1>
+        <p>Yazilim gelistirme yolculugum ve yeteneklerim</p>
+    </div>
+
+    <!-- About Content -->
+    <section class="section">
+        <div id="about-content">
+            <div class="loading" style="text-align: center; padding: 4rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #667eea;"></i>
+                <p style="margin-top: 1rem; color: #a1a1aa;">Yukleniyor...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Berke OK. Tum haklari saklidir.</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Sosyal medya linklerini yukle
+            database.ref('iletisim').once('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    const socialLinks = document.getElementById('social-links');
+                    let html = '';
+                    if (data.github) html += `<a href="${data.github}" target="_blank"><i class="fab fa-github"></i></a>`;
+                    if (data.linkedin) html += `<a href="${data.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>`;
+                    if (data.twitter) html += `<a href="${data.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
+                    if (data.instagram) html += `<a href="${data.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+                    if (html) socialLinks.innerHTML = html;
+                }
+            });
+            
+            const aboutContent = document.getElementById('about-content');
+            
+            database.ref('hakkimda').once('value', (snapshot) => {
+                const data = snapshot.val();
+                
+                if (!data) {
+                    aboutContent.innerHTML = `
+                        <div style="text-align: center; padding: 4rem;">
+                            <p style="color: #a1a1aa;">Hakkimda bilgisi henuz eklenmemis.</p>
+                            <p style="color: #71717a; font-size: 0.875rem; margin-top: 0.5rem;">Admin panelden ekleyebilirsiniz.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Profil foto varsayilan
+                const profilFoto = data.profilFoto || 'https://via.placeholder.com/250x250/667eea/ffffff?text=Profil';
+                
+                let html = `
+                    <div class="about-content">
+                        <div class="about-image">
+                            <img src="${profilFoto}" alt="Profil" onerror="this.src='https://via.placeholder.com/250x250/667eea/ffffff?text=Profil'">
+                        </div>
+                        <div class="about-text">
+                            <h2>${data.baslik || 'Ben Kimim?'}</h2>
+                            <p>${data.biyografi || ''}</p>
+                            ${data.biyografi2 ? `<p>${data.biyografi2}</p>` : ''}
+                            
+                            ${data.egitim ? `
+                                <h2 style="margin-top: 2rem;">Egitim</h2>
+                                <p>
+                                    ${data.egitim}
+                                    ${data.egitimYillari ? `<br><small style="color: #71717a;">${data.egitimYillari}</small>` : ''}
+                                </p>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                // Yetenekler
+                if (data.yetenekler && data.yetenekler.length > 0) {
+                    html += `
+                        <h2 class="section-title" style="margin-top: 4rem;">Yeteneklerim</h2>
+                        <div class="skills-grid">
+                            ${data.yetenekler.map(skill => `
+                                <div class="skill-card">
+                                    <h4><i class="fas ${skill.ikon || 'fa-code'}"></i> ${skill.baslik}</h4>
+                                    <p>${skill.aciklama}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+                
+                aboutContent.innerHTML = html;
+            });
+        });
+    </script>
+</body>
+</html>
