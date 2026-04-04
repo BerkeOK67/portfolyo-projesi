@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iletisim - Berke OK</title>
+    <title>İletişim - Berke OK</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -16,8 +16,8 @@
             <nav>
                 <a href="index.html">Anasayfa</a>
                 <a href="projeler.html">Projeler</a>
-                <a href="hakkimda.html">Hakkimda</a>
-                <a href="iletisim.html" class="active">Iletisim</a>
+                <a href="hakkimda.html">Hakkımda</a>
+                <a href="iletisim.html" class="active">İletişim</a>
             </nav>
             <div class="social-links" id="social-links">
                 <a href="#" target="_blank"><i class="fab fa-github"></i></a>
@@ -28,27 +28,27 @@
 
     <!-- Page Header -->
     <div class="page-header">
-        <h1>Iletisim</h1>
-        <p>Benimle iletisime gecmek icin asagidaki kanallari kullanabilirsiniz</p>
+        <h1>İletişim</h1>
+        <p>Benimle iletişime geçmek için aşağıdaki kanalları kullanabilirsiniz</p>
     </div>
 
     <!-- Contact Content -->
     <section class="section">
         <div class="contact-content">
             <div class="contact-info" id="contact-info">
-                <h3>Iletisim Bilgileri</h3>
+                <h3>İletişim Bilgileri</h3>
                 <div class="loading">
                     <i class="fas fa-spinner"></i>
-                    <p>Yukleniyor...</p>
+                    <p>Yükleniyor...</p>
                 </div>
             </div>
             
             <div class="contact-form">
-                <h3 style="margin-bottom: 1.5rem; color: #e4e4e7;">Mesaj Gonder</h3>
+                <h3 style="margin-bottom: 1.5rem; color: #e4e4e7;">Mesaj Gönderin</h3>
                 <form id="contact-form">
                     <div class="form-group">
-                        <label for="name">Adiniz</label>
-                        <input type="text" id="name" name="name" required placeholder="Adinizi girin">
+                        <label for="name">Adınız</label>
+                        <input type="text" id="name" name="name" required placeholder="Adınızı girin">
                     </div>
                     
                     <div class="form-group">
@@ -62,12 +62,12 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="message">Mesajiniz</label>
-                        <textarea id="message" name="message" required placeholder="Mesajinizi yazin..."></textarea>
+                        <label for="message">Mesajınız</label>
+                        <textarea id="message" name="message" required placeholder="Mesajınızı yazın..."></textarea>
                     </div>
                     
                     <button type="submit" class="btn" style="width: 100%;">
-                        <i class="fas fa-paper-plane"></i> Gonder
+                        <i class="fas fa-paper-plane"></i> Gönder
                     </button>
                 </form>
             </div>
@@ -76,7 +76,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Berke OK. Tum haklari saklidir.</p>
+        <p>&copy; 2026 Berke OK. Tüm hakları saklıdır.</p>
     </footer>
     
     <!-- Firebase SDK -->
@@ -88,7 +88,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <script>
-        // EmailJS'i baslat
+        // EmailJS'i başlat
         emailjs.init("jZer9akld25gePu5L");
         document.addEventListener('DOMContentLoaded', () => {
             const contactInfo = document.getElementById('contact-info');
@@ -96,10 +96,10 @@
             database.ref('iletisim').once('value', (snapshot) => {
                 const data = snapshot.val();
                 
-                let html = '<h3>Iletisim Bilgileri</h3>';
+                let html = '<h3>İletişim Bilgileri</h3>';
                 
                 if (!data) {
-                    html += '<p style="color: #a1a1aa;">Iletisim bilgisi henuz eklenmemis.</p>';
+                    html += '<p style="color: #a1a1aa;">İletişim bilgisi henüz eklenmemiş.</p>';
                     contactInfo.innerHTML = html;
                     return;
                 }
@@ -216,7 +216,7 @@
                 
                 contactInfo.innerHTML = html;
                 
-                // Header sosyal medya linklerini guncelle
+                // Header sosyal medya linklerini güncelle
                 const socialLinks = document.getElementById('social-links');
                 let socialHtml = '';
                 if (data.github) socialHtml += `<a href="${data.github}" target="_blank"><i class="fab fa-github"></i></a>`;
@@ -233,10 +233,10 @@
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gonderiliyor...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gönderiliyor...';
             
             try {
-                // EmailJS ile mail gonder
+                // EmailJS ile mail gönder
                 const templateParams = {
                     from_name: document.getElementById('name').value,
                     from_email: document.getElementById('email').value,
@@ -246,12 +246,12 @@
                 
                 await emailjs.send('service_god4ynl', 'template_8eaxgr4', templateParams);
                 
-                // Basari mesaji goster
-                showNotification('Mesajiniz basariyla gonderildi!', 'success');
+                // Başarı mesajı göster
+                showNotification('Mesajınız başarıyla gönderildi!', 'success');
                 this.reset();
                 
             } catch (error) {
-                showNotification('Bir hata olustu. Lutfen tekrar deneyin.', 'error');
+                showNotification('Bir hata oluştu. Lütfen tekrar deneyin.', 'error');
                 console.error('EmailJS Error:', error);
             } finally {
                 submitBtn.disabled = false;

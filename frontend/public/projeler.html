@@ -16,8 +16,8 @@
             <nav>
                 <a href="index.html">Anasayfa</a>
                 <a href="projeler.html" class="active">Projeler</a>
-                <a href="hakkimda.html">Hakkimda</a>
-                <a href="iletisim.html">Iletisim</a>
+                <a href="hakkimda.html">Hakkımda</a>
+                <a href="iletisim.html">İletişim</a>
             </nav>
             <div class="social-links" id="social-links">
                 <a href="#" target="_blank"><i class="fab fa-github"></i></a>
@@ -29,7 +29,7 @@
     <!-- Page Header -->
     <div class="page-header">
         <h1>Projelerim</h1>
-        <p>Gelistirdigim tum projeler. Detaylar icin proje kartina tiklayin.</p>
+        <p>Geliştirdiğim tüm projeler. Detaylar için proje kartına tıklayın.</p>
     </div>
 
     <!-- All Projects -->
@@ -37,14 +37,14 @@
         <div id="all-projects" class="projects-grid">
             <div class="loading">
                 <i class="fas fa-spinner"></i>
-                <p>Projeler yukleniyor...</p>
+                <p>Projeler yükleniyor...</p>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Berke OK. Tum haklari saklidir.</p>
+        <p>&copy; 2026 Berke OK. Tüm hakları saklıdır.</p>
     </footer>
 
     <!-- Firebase SDK -->
@@ -57,16 +57,16 @@
         document.addEventListener('DOMContentLoaded', () => {
             const grid = document.getElementById('all-projects');
             
-            // Projeleri yukle
+            // Projeleri yükle
             getProjects((projects) => {
                 if (projects.length === 0) {
-                    grid.innerHTML = '<div class="loading"><p>Henuz proje eklenmemis.</p></div>';
+                    grid.innerHTML = '<div class="loading"><p>Henüz proje eklenmemiş.</p></div>';
                     return;
                 }
                 grid.innerHTML = projects.map(project => createProjectCard(project)).join('');
             });
             
-            // Sosyal medya linklerini yukle
+            // Sosyal medya linklerini yükle
             database.ref('iletisim').once('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {

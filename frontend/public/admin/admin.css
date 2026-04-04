@@ -739,6 +739,208 @@
     margin-left: 0.5rem;
 }
 
+/* CV Management */
+.cv-management {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 1000px;
+}
+
+.current-cv-info, .cv-upload-section {
+    background: rgba(26, 26, 46, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
+}
+
+.current-cv-info h3, .cv-upload-section h3 {
+    color: #e4e4e7;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.current-cv-info h3 i, .cv-upload-section h3 i {
+    color: #667eea;
+    font-size: 1.25rem;
+}
+
+.current-cv-display {
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.no-cv {
+    color: #71717a;
+    font-style: italic;
+    text-align: center;
+    padding: 2rem;
+}
+
+.cv-info-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    width: 100%;
+    padding: 1.25rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+}
+
+.cv-info-card .cv-icon {
+    font-size: 3rem;
+    color: #ef4444;
+    width: 70px;
+    height: 70px;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.cv-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.cv-filename {
+    color: #e4e4e7;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    word-break: break-word;
+}
+
+.cv-date {
+    color: #71717a;
+    font-size: 0.85rem;
+}
+
+.cv-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.cv-actions .btn-outline {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.cv-actions .btn-delete {
+    width: 36px;
+    height: 36px;
+    align-self: center;
+}
+
+.cv-upload-area {
+    border: 2px dashed rgba(102, 126, 234, 0.4);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+    background: rgba(102, 126, 234, 0.02);
+}
+
+.cv-upload-area:hover {
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.08);
+}
+
+.cv-upload-area input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.cv-upload-area .upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.cv-upload-area .upload-placeholder i {
+    font-size: 3.5rem;
+    color: #ef4444;
+    width: 80px;
+    height: 80px;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cv-upload-area .upload-placeholder p {
+    color: #e4e4e7;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.cv-upload-area .upload-placeholder small {
+    color: #71717a;
+    font-size: 0.85rem;
+}
+
+.cv-preview {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    margin-top: 1.5rem;
+}
+
+.cv-preview > i {
+    color: #ef4444;
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.cv-preview span {
+    flex: 1;
+    color: #e4e4e7;
+    font-size: 0.95rem;
+    font-weight: 500;
+    word-break: break-word;
+}
+
+.cv-preview .btn-delete {
+    flex-shrink: 0;
+}
+
+#upload-cv-btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+#upload-cv-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .sidebar {
@@ -756,6 +958,10 @@
     }
     
     .skill-item {
+        grid-template-columns: 1fr;
+    }
+    
+    .cv-management {
         grid-template-columns: 1fr;
     }
 }

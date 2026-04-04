@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin.css?v=2">
 </head>
 <body>
     <!-- Login Screen -->
@@ -50,6 +50,9 @@
                 </a>
                 <a href="#" class="nav-item" data-section="contact">
                     <i class="fas fa-envelope"></i> Iletisim
+                </a>
+                <a href="#" class="nav-item" data-section="cv">
+                    <i class="fas fa-file-pdf"></i> CV Yönetimi
                 </a>
                 <a href="#" class="nav-item" data-section="settings">
                     <i class="fas fa-cogs"></i> Ayarlar
@@ -215,6 +218,43 @@
                     <div class="form-group">
                         <label for="contact-website"><i class="fas fa-globe"></i> Kisisel Website</label>
                         <input type="url" id="contact-website" placeholder="https://benimsite.com">
+                    </div>
+                </div>
+            </section>
+
+            <!-- CV Section -->
+            <section id="cv-section" class="content-section">
+                <div class="section-header">
+                    <h1>CV Yönetimi</h1>
+                </div>
+                <div class="cv-management">
+                    <div class="current-cv-info">
+                        <h3><i class="fas fa-file-pdf"></i> Mevcut CV</h3>
+                        <div id="current-cv-display" class="current-cv-display">
+                            <p class="no-cv">Henüz CV yüklenmemiş</p>
+                        </div>
+                    </div>
+                    
+                    <div class="cv-upload-section">
+                        <h3><i class="fas fa-cloud-upload-alt"></i> Yeni CV Yükle</h3>
+                        <div class="cv-upload-area" id="cv-upload-area">
+                            <input type="file" id="cv-file" accept=".pdf" onchange="previewCV(this)">
+                            <label for="cv-file" class="upload-placeholder">
+                                <i class="fas fa-file-pdf"></i>
+                                <p>PDF dosyasını sürükleyin veya tıklayın</p>
+                                <small>Sadece PDF formatı desteklenir</small>
+                            </label>
+                        </div>
+                        <div id="cv-preview" class="cv-preview" style="display: none;">
+                            <i class="fas fa-file-pdf"></i>
+                            <span id="cv-file-name"></span>
+                            <button type="button" class="btn-delete" onclick="clearCVPreview()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <button class="btn" onclick="uploadCV()" id="upload-cv-btn" style="margin-top: 1rem;" disabled>
+                            <i class="fas fa-upload"></i> CV'yi Yükle
+                        </button>
                     </div>
                 </div>
             </section>

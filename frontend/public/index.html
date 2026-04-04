@@ -16,8 +16,8 @@
             <nav>
                 <a href="index.html" class="active">Anasayfa</a>
                 <a href="projeler.html">Projeler</a>
-                <a href="hakkimda.html">Hakkimda</a>
-                <a href="iletisim.html">Iletisim</a>
+                <a href="hakkimda.html">Hakkımda</a>
+                <a href="iletisim.html">İletişim</a>
             </nav>
             <div class="social-links" id="social-links">
                 <a href="#" target="_blank"><i class="fab fa-github"></i></a>
@@ -29,7 +29,7 @@
     <!-- Hero -->
     <section class="hero">
         <h1>Merhaba, Ben Berke</h1>
-        <p>Full-stack gelistirici olarak modern web teknolojileri ve bulut servisleri ile projeler gelistiriyorum.</p>
+        <p>Modern web ve bulut teknolojileriyle (React, Python, AWS) yenilikçi, uçtan uca projeler geliştiriyorum. Kod kalitesini ve kullanıcı deneyimini ön planda tutuyorum. Yeteneklerimi ve deneyimimi görmek için aşağıdaki projelerimi inceleyin veya aklınızdaki bir proje için benimle hemen iletişime geçin. </p>
         <div class="hero-tags">
             <span>Python</span>
             <span>Flask</span>
@@ -41,7 +41,7 @@
 
     <!-- Featured Projects -->
     <section class="section" id="projects">
-        <h2 class="section-title">One Cikan Projeler</h2>
+        <h2 class="section-title">Öne Çıkan Projeler</h2>
         <div id="featured-projects" class="projects-grid">
             <div class="loading">
                 <i class="fas fa-spinner"></i>
@@ -49,13 +49,154 @@
             </div>
         </div>
         <div class="section-footer">
-            <a href="projeler.html" class="btn">Tum Projeleri Gor <i class="fas fa-arrow-right"></i></a>
+            <a href="projeler.html" class="btn">Tüm Projeleri Gör <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- CV & Social Card -->
+    <section class="section">
+        <div class="info-card">
+            <div class="info-card-content">
+                <div class="info-card-icon">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <div class="info-card-text">
+                    <h3>CV'mi Görüntüleyin</h3>
+                    <p>Deneyimlerimi, eğitimimi ve teknik becerilerimi detaylı olarak incelemek için CV'mi PDF formatında görüntüleyebilirsiniz.</p>
+                    <a href="#" id="cv-download-btn" class="btn" style="opacity: 0.5; pointer-events: none;"><i class="fas fa-file-pdf"></i> CV Yükleniyor...</a>
+                </div>
+            </div>
+            <div class="info-card-social">
+                <h4>Beni Takip Edin</h4>
+                <div class="social-links-detailed" id="social-links-detailed">
+                    <a href="#" id="detail-github" target="_blank">
+                        <i class="fab fa-github"></i>
+                        <span>github.com/BerkeOK67</span>
+                    </a>
+                    <a href="#" id="detail-linkedin" target="_blank">
+                        <i class="fab fa-linkedin"></i>
+                        <span>linkedin.com/in/berkeok</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="section" id="contact-section">
+        <h2 class="section-title">Bana Ulaşın</h2>
+        <p class="section-subtitle">Bir projeniz mi var? Soru sormak mı istiyorsunuz? Aşağıdaki formu doldurun, en kısa sürede dönüş yapacağım.</p>
+        <div class="contact-form-wrapper">
+            <form id="home-contact-form" class="contact-form-inline">
+                <div class="form-row-inline">
+                    <div class="form-group">
+                        <label for="home-name">Adınız</label>
+                        <input type="text" id="home-name" name="name" required placeholder="Adınızı girin">
+                    </div>
+                    <div class="form-group">
+                        <label for="home-email">E-posta</label>
+                        <input type="email" id="home-email" name="email" required placeholder="E-posta adresinizi girin">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="home-subject">Konu</label>
+                    <input type="text" id="home-subject" name="subject" required placeholder="Mesaj konusu">
+                </div>
+                <div class="form-group">
+                    <label for="home-message">Mesajınız</label>
+                    <textarea id="home-message" name="message" required placeholder="Mesajınızı yazın..." rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn">
+                    <i class="fas fa-paper-plane"></i> Mesaj Gönder
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section" id="faq-section">
+        <h2 class="section-title">Sıkça Sorulan Sorular</h2>
+        <p class="section-subtitle">Merak edilenler ve eğlenceli cevaplar</p>
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Twitter (X) hesabım çalındı, geri alabilir miyiz?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Elon Musk ile henüz o kadar samimi değiliz. Mavi tikin yoksa şifre sıfırlama linkine dua etmekten başka çaremiz yok.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Sevgilimin WhatsApp mesajlarını okuyabilir miyiz?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Telefonunu ondan gizlice alıp bana getirirseniz, evet okuyabiliriz. Diğer türlüsü FBI'ın alanına giriyor, beni o işlere bulaştırmayın.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>İnternetim çok yavaş, bizim modeme bir baksan?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Fişi çekip 10 saniye bekledikten sonra tekrar takmayı denediniz mi? Çünkü inanın benim de bildiğim tek çözüm bu.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Bana bedava Netflix izleyeceğim bir program yazar mısın?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Ben de kendi hesabımı üç kişiyle ortak ödüyorum, o yüzden o seviyeye henüz gelemedim.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Canlıda bir web sitem var sadece bir "Dark Mode" butonu eklesek? İki satır kod değil mi?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>O iki satır kodu yazarım, yarın bir bakmışsın veritabanı silinmiş. Çalışıyorsa dokunmayın ve göz temasından kaçının.</p>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 Berke OK. Tum haklari saklidir.</p>
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Berke OK</h3>
+                <p>Full-stack developer olarak modern web teknolojileri ve bulut servisleri ile yenilikçi projeler geliştiriyorum.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Hızlı Erişim</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fas fa-home"></i> Anasayfa</a></li>
+                    <li><a href="projeler.html"><i class="fas fa-code"></i> Projelerim</a></li>
+                    <li><a href="hakkimda.html"><i class="fas fa-user"></i> Ben Kimim</a></li>
+                    <li><a href="iletisim.html"><i class="fas fa-envelope"></i> Bana Ulaşın</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>İletişim</h4>
+                <ul class="footer-contact" id="footer-contact">
+                    <li><i class="fas fa-envelope"></i> <span id="footer-email">yukleniyor...</span></li>
+                    <li><i class="fas fa-map-marker-alt"></i> <span id="footer-location">Türkiye</span></li>
+                </ul>
+                <div class="footer-social" id="footer-social">
+                    <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Berke OK. Tüm hakları saklıdır. | <a href="#">Gizlilik Politikası</a></p>
+        </div>
     </footer>
 
     <!-- Firebase SDK -->
@@ -64,33 +205,154 @@
     <script src="js/firebase-config.js"></script>
     <script src="js/app.js"></script>
     
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        // EmailJS'i baslat
+        emailjs.init("jZer9akld25gePu5L");
+        
+        document.addEventListener('DOMContentLoaded', async () => {
             const grid = document.getElementById('featured-projects');
             
-            // Projeleri yukle
-            getFeaturedProjects((projects) => {
-                if (projects.length === 0) {
-                    grid.innerHTML = '<div class="loading"><p>Henuz proje eklenmemis.</p></div>';
-                    return;
+            // Tum verileri paralel olarak cek (cok daha hizli)
+            const [projelerSnapshot, cvSnapshot, iletisimSnapshot] = await Promise.all([
+                database.ref('projeler').once('value'),
+                database.ref('cv').once('value'),
+                database.ref('iletisim').once('value')
+            ]);
+            
+            // Projeleri isle
+            const projelerData = projelerSnapshot.val();
+            if (projelerData) {
+                const projects = Array.isArray(projelerData) 
+                    ? projelerData.filter(p => p && p.oneCikan) 
+                    : Object.values(projelerData).filter(p => p && p.oneCikan);
+                
+                if (projects.length > 0) {
+                    grid.innerHTML = projects.slice(0, 3).map(project => createProjectCard(project)).join('');
+                } else {
+                    grid.innerHTML = '<div class="loading"><p>Henüz öne çıkan proje yok.</p></div>';
                 }
-                grid.innerHTML = projects.map(project => createProjectCard(project)).join('');
+            } else {
+                grid.innerHTML = '<div class="loading"><p>Henüz proje eklenmemiş.</p></div>';
+            }
+            
+            // CV linkini isle
+            const cvData = cvSnapshot.val();
+            const cvBtn = document.getElementById('cv-download-btn');
+            if (cvData && cvData.url) {
+                cvBtn.innerHTML = '<i class="fas fa-file-pdf"></i> CV\'mi Görüntüle';
+                cvBtn.style.opacity = '1';
+                cvBtn.style.pointerEvents = 'auto';
+                cvBtn.href = cvData.url;
+                cvBtn.target = '_blank';
+            } else {
+                cvBtn.innerHTML = '<i class="fas fa-times"></i> CV Henüz Yüklenmedi';
+                cvBtn.style.opacity = '0.5';
+                cvBtn.href = '#';
+            }
+            
+            // Iletisim bilgilerini isle
+            const iletisimData = iletisimSnapshot.val();
+            if (iletisimData) {
+                // Header sosyal linkler
+                const socialLinks = document.getElementById('social-links');
+                let html = '';
+                if (iletisimData.github) html += `<a href="${iletisimData.github}" target="_blank"><i class="fab fa-github"></i></a>`;
+                if (iletisimData.linkedin) html += `<a href="${iletisimData.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>`;
+                if (iletisimData.twitter) html += `<a href="${iletisimData.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
+                if (iletisimData.instagram) html += `<a href="${iletisimData.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+                if (html) socialLinks.innerHTML = html;
+                
+                // Detayli sosyal linkler
+                if (iletisimData.github) {
+                    const el = document.getElementById('detail-github');
+                    el.href = iletisimData.github;
+                    el.querySelector('span').textContent = iletisimData.github.replace('https://', '');
+                }
+                if (iletisimData.linkedin) {
+                    const el = document.getElementById('detail-linkedin');
+                    el.href = iletisimData.linkedin;
+                    el.querySelector('span').textContent = iletisimData.linkedin.replace('https://', '');
+                }
+                
+                // Footer
+                if (iletisimData.email) document.getElementById('footer-email').textContent = iletisimData.email;
+                if (iletisimData.konum) document.getElementById('footer-location').textContent = iletisimData.konum;
+                
+                // Footer sosyal
+                const footerSocial = document.getElementById('footer-social');
+                let footerHtml = '';
+                if (iletisimData.github) footerHtml += `<a href="${iletisimData.github}" target="_blank"><i class="fab fa-github"></i></a>`;
+                if (iletisimData.linkedin) footerHtml += `<a href="${iletisimData.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>`;
+                if (iletisimData.twitter) footerHtml += `<a href="${iletisimData.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
+                if (iletisimData.instagram) footerHtml += `<a href="${iletisimData.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+                if (footerHtml) footerSocial.innerHTML = footerHtml;
+            }
+        });
+        
+        // FAQ toggle
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Tum FAQ'lari kapat
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
             });
             
-            // Sosyal medya linklerini yukle
-            database.ref('iletisim').once('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    const socialLinks = document.getElementById('social-links');
-                    let html = '';
-                    if (data.github) html += `<a href="${data.github}" target="_blank"><i class="fab fa-github"></i></a>`;
-                    if (data.linkedin) html += `<a href="${data.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>`;
-                    if (data.twitter) html += `<a href="${data.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
-                    if (data.instagram) html += `<a href="${data.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
-                    if (html) socialLinks.innerHTML = html;
-                }
-            });
+            // Tiklanani ac/kapat
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+        
+        // Home contact form
+        document.getElementById('home-contact-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gonderiliyor...';
+            
+            try {
+                const templateParams = {
+                    from_name: document.getElementById('home-name').value,
+                    from_email: document.getElementById('home-email').value,
+                    subject: document.getElementById('home-subject').value,
+                    message: document.getElementById('home-message').value
+                };
+                
+                await emailjs.send('service_god4ynl', 'template_8eaxgr4', templateParams);
+                
+                showNotification('Mesajınız başarıyla gönderildi!', 'success');
+                this.reset();
+                
+            } catch (error) {
+                showNotification('Bir hata oluştu. Lütfen tekrar deneyin.', 'error');
+                console.error('EmailJS Error:', error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
         });
+        
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = 'notification ' + type;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('fade-out');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
     </script>
 </body>
 </html>

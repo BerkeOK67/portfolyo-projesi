@@ -2,10 +2,17 @@
 function createProjectCard(project, showDetailButton = true) {
     return `
         <div class="project-card" ${showDetailButton ? `onclick="openModal(${project.id})"` : ''}>
-            <img src="${project.kapakFotografi || 'https://via.placeholder.com/400x250/667eea/ffffff?text=Proje'}" 
-                 alt="${project.isim}" 
-                 class="project-image"
-                 onerror="this.src='https://via.placeholder.com/400x250/667eea/ffffff?text=Gorsel+Yok'">
+            <div class="project-image-wrapper">
+                <div class="image-placeholder">
+                    <i class="fas fa-image"></i>
+                </div>
+                <img src="${project.kapakFotografi || 'https://via.placeholder.com/400x250/667eea/ffffff?text=Proje'}" 
+                     alt="${project.isim}" 
+                     class="project-image"
+                     loading="lazy"
+                     onload="this.classList.add('loaded')"
+                     onerror="this.src='https://via.placeholder.com/400x250/667eea/ffffff?text=Gorsel+Yok'; this.classList.add('loaded')">
+            </div>
             <div class="project-content">
                 <h3>${project.isim}</h3>
                 <p>${project.aciklama || ''}</p>

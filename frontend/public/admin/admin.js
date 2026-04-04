@@ -20,6 +20,7 @@ let currentUser = null;
 let projectImages = [];
 let coverImageIndex = 0;
 let editingProjectId = null;
+let selectedCVFile = null;
 
 // ==================== AUTH ====================
 
@@ -53,6 +54,7 @@ auth.onAuthStateChanged((user) => {
         loadProjects();
         loadAbout();
         loadContact();
+        loadCV();
         loadSettings();
     } else {
         currentUser = null;
@@ -647,6 +649,122 @@ async function saveContact() {
         await database.ref('iletisim').set(contactData);
         showToast('Iletisim bilgileri kaydedildi', 'success');
         
+    } catch (error) {
+        showToast('Hata: ' + error.message, 'error');
+    }
+}
+
+// ==================== CV ====================
+
+function loadCV() {
+    database.ref('cv').once('value', (snapshot) => {
+        const data = snapshot.val();
+        const container = document.getElementById('current-cv-display');
+        
+        if (data && data.url) {
+            const uploadDate = data.yuklemeTarihi ? new Date(data.yuklemeTarihi).toLocaleDateString('tr-TR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }) : 'Bilinmiyor';
+            container.innerHTML = `
+                <div class="cv-info-card">
+                    <div class="cv-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div class="cv-details">
+                        <p class="cv-filename">${data.dosyaAdi || 'CV.pdf'}</p>
+                        <p class="cv-date"><i class="fas fa-clock"></i> ${uploadDate}</p>
+                    </div>
+                    <div class="cv-actions">
+                        <a href="${data.url}" target="_blank" class="btn btn-outline">
+                            <i class="fas fa-external-link-alt"></i> Görüntüle
+                        </a>
+                        <button class="btn-delete" onclick="deleteCV()" title="CV'yi Sil">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        } else {
+            container.innerHTML = `
+                <div class="no-cv">
+                    <i class="fas fa-file-upload" style="font-size: 3rem; color: #3f3f46; margin-bottom: 1rem; display: block;"></i>
+                    <p>Henüz CV yüklenmemiş</p>
+                    <small style="color: #52525b;">Sağ taraftan PDF dosyanızı yükleyebilirsiniz</small>
+                </div>
+            `;
+        }
+    });
+}
+
+function previewCV(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        
+        if (file.type !== 'application/pdf') {
+            showToast('Sadece PDF dosyası yükleyebilirsiniz', 'error');
+            input.value = '';
+            return;
+        }
+        
+        selectedCVFile = file;
+        document.getElementById('cv-file-name').textContent = file.name;
+        document.getElementById('cv-preview').style.display = 'flex';
+        document.getElementById('upload-cv-btn').disabled = false;
+    }
+}
+
+function clearCVPreview() {
+    selectedCVFile = null;
+    document.getElementById('cv-file').value = '';
+    document.getElementById('cv-preview').style.display = 'none';
+    document.getElementById('upload-cv-btn').disabled = true;
+}
+
+async function uploadCV() {
+    if (!selectedCVFile) {
+        showToast('Lütfen bir PDF dosyası seçin', 'error');
+        return;
+    }
+    
+    const btn = document.getElementById('upload-cv-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Yükleniyor...';
+    
+    try {
+        const fileName = `cv/CV_${Date.now()}.pdf`;
+        const ref = storage.ref(fileName);
+        await ref.put(selectedCVFile);
+        const url = await ref.getDownloadURL();
+        
+        await database.ref('cv').set({
+            url: url,
+            dosyaAdi: selectedCVFile.name,
+            yuklemeTarihi: new Date().toISOString()
+        });
+        
+        showToast('CV başarıyla yüklendi', 'success');
+        clearCVPreview();
+        loadCV();
+        
+    } catch (error) {
+        showToast('Hata: ' + error.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-upload"></i> CV\'yi Yükle';
+    }
+}
+
+async function deleteCV() {
+    if (!confirm('CV\'yi silmek istediğinizden emin misiniz?')) return;
+    
+    try {
+        await database.ref('cv').remove();
+        showToast('CV silindi', 'success');
+        loadCV();
     } catch (error) {
         showToast('Hata: ' + error.message, 'error');
     }

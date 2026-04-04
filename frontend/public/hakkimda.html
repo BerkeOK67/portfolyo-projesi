@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hakkimda - Berke OK</title>
+    <title>Hakkımda - Berke OK</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -16,8 +16,8 @@
             <nav>
                 <a href="index.html">Anasayfa</a>
                 <a href="projeler.html">Projeler</a>
-                <a href="hakkimda.html" class="active">Hakkimda</a>
-                <a href="iletisim.html">Iletisim</a>
+                <a href="hakkimda.html" class="active">Hakkımda</a>
+                <a href="iletisim.html">İletişim</a>
             </nav>
             <div class="social-links" id="social-links">
                 <a href="#" target="_blank"><i class="fab fa-github"></i></a>
@@ -28,8 +28,8 @@
 
     <!-- Page Header -->
     <div class="page-header">
-        <h1>Hakkimda</h1>
-        <p>Yazilim gelistirme yolculugum ve yeteneklerim</p>
+        <h1>Hakkımda</h1>
+        <p>Yazılım geliştirme yolculuğum ve yeteneklerim</p>
     </div>
 
     <!-- About Content -->
@@ -37,14 +37,14 @@
         <div id="about-content">
             <div class="loading" style="text-align: center; padding: 4rem;">
                 <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #667eea;"></i>
-                <p style="margin-top: 1rem; color: #a1a1aa;">Yukleniyor...</p>
+                <p style="margin-top: 1rem; color: #a1a1aa;">Yükleniyor...</p>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Berke OK. Tum haklari saklidir.</p>
+        <p>&copy; 2026 Berke OK. Tüm hakları saklıdır.</p>
     </footer>
 
     <!-- Firebase SDK -->
@@ -54,7 +54,7 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Sosyal medya linklerini yukle
+            // Sosyal medya linklerini yükle
             database.ref('iletisim').once('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -76,14 +76,14 @@
                 if (!data) {
                     aboutContent.innerHTML = `
                         <div style="text-align: center; padding: 4rem;">
-                            <p style="color: #a1a1aa;">Hakkimda bilgisi henuz eklenmemis.</p>
+                            <p style="color: #a1a1aa;">Hakkımda bilgisi henüz eklenmemiş.</p>
                             <p style="color: #71717a; font-size: 0.875rem; margin-top: 0.5rem;">Admin panelden ekleyebilirsiniz.</p>
                         </div>
                     `;
                     return;
                 }
                 
-                // Profil foto varsayilan
+                // Profil foto varsayılan
                 const profilFoto = data.profilFoto || 'https://via.placeholder.com/250x250/667eea/ffffff?text=Profil';
                 
                 let html = `
@@ -97,7 +97,7 @@
                             ${data.biyografi2 ? `<p>${data.biyografi2}</p>` : ''}
                             
                             ${data.egitim ? `
-                                <h2 style="margin-top: 2rem;">Egitim</h2>
+                                <h2 style="margin-top: 2rem;">Eğitim</h2>
                                 <p>
                                     ${data.egitim}
                                     ${data.egitimYillari ? `<br><small style="color: #71717a;">${data.egitimYillari}</small>` : ''}
