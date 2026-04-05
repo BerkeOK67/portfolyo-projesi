@@ -3,7 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Berke OK - Portfolyo</title>
+    <title>Berke OK - Full Stack Developer | Portfolyo</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Berke OK - Modern web ve bulut teknolojileriyle (React, Python, AWS) yenilikçi projeler geliştiren Full Stack Developer. Portfolyo ve projelerimi inceleyin.">
+    <meta name="keywords" content="Berke OK, Full Stack Developer, Web Developer, React, Python, AWS, Firebase, Portfolyo">
+    <meta name="author" content="Berke OK">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://berkeokportfolyo.duckdns.org/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://berkeokportfolyo.duckdns.org/">
+    <meta property="og:title" content="Berke OK - Full Stack Developer">
+    <meta property="og:description" content="Modern web ve bulut teknolojileriyle yenilikçi projeler geliştiren Full Stack Developer.">
+    <meta property="og:image" content="https://berkeokportfolyo.duckdns.org/assets/og-image.png">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://berkeokportfolyo.duckdns.org/">
+    <meta name="twitter:title" content="Berke OK - Full Stack Developer">
+    <meta name="twitter:description" content="Modern web ve bulut teknolojileriyle yenilikçi projeler geliştiren Full Stack Developer.">
+    <meta name="twitter:image" content="https://berkeokportfolyo.duckdns.org/assets/og-image.png">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#667eea">
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="preconnect" href="https://firebasestorage.googleapis.com">
+    
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -16,6 +50,7 @@
             <nav>
                 <a href="index.html" class="active">Anasayfa</a>
                 <a href="projeler.html">Projeler</a>
+                <a href="yazilar.html">Yazılar</a>
                 <a href="hakkimda.html">Hakkımda</a>
                 <a href="iletisim.html">İletişim</a>
             </nav>
@@ -28,14 +63,46 @@
 
     <!-- Hero -->
     <section class="hero">
-        <h1>Merhaba, Ben Berke</h1>
-        <p>Modern web ve bulut teknolojileriyle (React, Python, AWS) yenilikçi, uçtan uca projeler geliştiriyorum. Kod kalitesini ve kullanıcı deneyimini ön planda tutuyorum. Yeteneklerimi ve deneyimimi görmek için aşağıdaki projelerimi inceleyin veya aklınızdaki bir proje için benimle hemen iletişime geçin. </p>
-        <div class="hero-tags">
-            <span>Python</span>
-            <span>Flask</span>
-            <span>React</span>
-            <span>AWS</span>
-            <span>Firebase</span>
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="terminal-buttons">
+                    <span class="terminal-btn close"><i class="fas fa-times"></i></span>
+                    <span class="terminal-btn minimize"><i class="fas fa-minus"></i></span>
+                    <span class="terminal-btn maximize"><i class="fas fa-plus"></i></span>
+                </div>
+                <div class="terminal-title">berke@portfolio ~ </div>
+            </div>
+            <div class="terminal-body">
+                <div class="code-text">
+                    <div class="code-line">
+                        <span class="code-prompt">$</span>
+                        <span class="code-command">cd ~/Desktop/portfolyo</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="code-prompt">$</span>
+                        <span class="code-command">ls -la</span>
+                    </div>
+                    <div class="code-line code-output">
+                        <span>readme.txt  projeler/  iletisim.txt</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="code-prompt">$</span>
+                        <span class="code-command">cat readme.txt</span>
+                        <span class="code-cursor">_</span>
+                    </div>
+                </div>
+                <div class="terminal-output">
+                    <h1 class="typewriter" id="hero-title"></h1>
+                    <p>Modern web ve bulut teknolojileriyle (React, Python, AWS) yenilikçi, uçtan uca projeler geliştiriyorum. Kod kalitesini ve kullanıcı deneyimini ön planda tutuyorum. Yeteneklerimi ve deneyimimi görmek için aşağıdaki projelerimi inceleyin veya aklınızdaki bir proje için benimle hemen iletişime geçin.</p>
+                    <div class="hero-tags">
+                        <span>Python</span>
+                        <span>Flask</span>
+                        <span>React</span>
+                        <span>AWS</span>
+                        <span>Firebase</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -43,9 +110,29 @@
     <section class="section" id="projects">
         <h2 class="section-title">Öne Çıkan Projeler</h2>
         <div id="featured-projects" class="projects-grid">
-            <div class="loading">
-                <i class="fas fa-spinner"></i>
-                <p>Projeler yukleniyor...</p>
+            <div class="project-card skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+            </div>
+            <div class="project-card skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
+            </div>
+            <div class="project-card skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-text"></div>
+                    <div class="skeleton-text short"></div>
+                </div>
             </div>
         </div>
         <div class="section-footer">
@@ -113,59 +200,6 @@
         </div>
     </section>
 
-    <!-- FAQ Section -->
-    <section class="section" id="faq-section">
-        <h2 class="section-title">Sıkça Sorulan Sorular</h2>
-        <p class="section-subtitle">Merak edilenler ve eğlenceli cevaplar</p>
-        <div class="faq-container">
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Twitter (X) hesabım çalındı, geri alabilir miyiz?</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer">
-                    <p>Elon Musk ile henüz o kadar samimi değiliz. Mavi tikin yoksa şifre sıfırlama linkine dua etmekten başka çaremiz yok.</p>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Sevgilimin WhatsApp mesajlarını okuyabilir miyiz?</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer">
-                    <p>Telefonunu ondan gizlice alıp bana getirirseniz, evet okuyabiliriz. Diğer türlüsü FBI'ın alanına giriyor, beni o işlere bulaştırmayın.</p>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>İnternetim çok yavaş, bizim modeme bir baksan?</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer">
-                    <p>Fişi çekip 10 saniye bekledikten sonra tekrar takmayı denediniz mi? Çünkü inanın benim de bildiğim tek çözüm bu.</p>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Bana bedava Netflix izleyeceğim bir program yazar mısın?</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer">
-                    <p>Ben de kendi hesabımı üç kişiyle ortak ödüyorum, o yüzden o seviyeye henüz gelemedim.</p>
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Canlıda bir web sitem var sadece bir "Dark Mode" butonu eklesek? İki satır kod değil mi?</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer">
-                    <p>O iki satır kodu yazarım, yarın bir bakmışsın veritabanı silinmiş. Çalışıyorsa dokunmayın ve göz temasından kaçının.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer class="main-footer">
         <div class="footer-content">
@@ -230,7 +264,14 @@
                     : Object.values(projelerData).filter(p => p && p.oneCikan);
                 
                 if (projects.length > 0) {
+                    // Önce opacity 0 ile gizle, sonra göster
+                    grid.style.opacity = '0';
                     grid.innerHTML = projects.slice(0, 3).map(project => createProjectCard(project)).join('');
+                    // Kısa bir gecikme ile görünür yap
+                    requestAnimationFrame(() => {
+                        grid.style.transition = 'opacity 0.3s ease';
+                        grid.style.opacity = '1';
+                    });
                 } else {
                     grid.innerHTML = '<div class="loading"><p>Henüz öne çıkan proje yok.</p></div>';
                 }
@@ -290,6 +331,12 @@
                 if (iletisimData.instagram) footerHtml += `<a href="${iletisimData.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
                 if (footerHtml) footerSocial.innerHTML = footerHtml;
             }
+            
+            // Veriler yüklendikten sonra animasyonları başlat
+            setTimeout(() => {
+                initScrollAnimations();
+                init3DTilt();
+            }, 100);
         });
         
         // FAQ toggle
@@ -353,6 +400,181 @@
                 setTimeout(() => notification.remove(), 300);
             }, 3000);
         }
+        
+        // ==================== INTERACTIONS ====================
+        
+        // 1. Typewriter Effect
+        function typeWriter(element, text, speed = 80) {
+            let i = 0;
+            element.innerHTML = '';
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+        
+        // 10. Terminal Yazma Animasyonu
+        function typeTerminal() {
+            const lines = document.querySelectorAll('.code-line');
+            let delay = 0;
+            
+            lines.forEach((line, index) => {
+                const command = line.querySelector('.code-command');
+                const output = line.querySelector('.code-output span') || line.classList.contains('code-output') ? line : null;
+                
+                if (command) {
+                    const text = command.textContent;
+                    command.textContent = '';
+                    command.style.visibility = 'visible';
+                    
+                    setTimeout(() => {
+                        let i = 0;
+                        const typeCmd = setInterval(() => {
+                            if (i < text.length) {
+                                command.textContent += text.charAt(i);
+                                i++;
+                            } else {
+                                clearInterval(typeCmd);
+                            }
+                        }, 50);
+                    }, delay);
+                    delay += text.length * 50 + 300;
+                } else if (line.classList.contains('code-output')) {
+                    line.style.opacity = '0';
+                    setTimeout(() => {
+                        line.style.opacity = '1';
+                    }, delay);
+                    delay += 200;
+                }
+            });
+            
+            // Hero title typewriter after terminal
+            setTimeout(() => {
+                typeWriter(document.getElementById('hero-title'), 'Merhaba, Ben Berke', 80);
+            }, delay + 300);
+        }
+        
+        // 2. Scroll Animasyonları (Slide-in)
+        function initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('slide-in-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.section, .project-card, .info-card, .faq-item, .contact-form-wrapper').forEach(el => {
+                el.classList.add('slide-in');
+                observer.observe(el);
+            });
+        }
+        
+        // 5. 3D Tilt Efekti - Proje Kartları
+        function init3DTilt() {
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+                });
+            });
+        }
+        
+        // 3. Dark/Light Mode Toggle
+        function initThemeToggle() {
+            const toggle = document.getElementById('theme-toggle');
+            if (!toggle) return;
+            
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            updateThemeIcon(currentTheme);
+            
+            toggle.addEventListener('click', () => {
+                const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                updateThemeIcon(theme);
+            });
+        }
+        
+        function updateThemeIcon(theme) {
+            const toggle = document.getElementById('theme-toggle');
+            if (toggle) {
+                toggle.innerHTML = theme === 'dark' 
+                    ? '<i class="fas fa-sun"></i>' 
+                    : '<i class="fas fa-moon"></i>';
+            }
+        }
+        
+        // Back to Top
+        function initBackToTop() {
+            const btn = document.getElementById('back-to-top');
+            if (!btn) return;
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    btn.classList.add('visible');
+                } else {
+                    btn.classList.remove('visible');
+                }
+            });
+            
+            btn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+        
+        // Ziyaretçi Sayacı
+        function trackVisitor() {
+            const today = new Date().toISOString().split('T')[0];
+            const visitorKey = 'visitor_' + today;
+            
+            if (!localStorage.getItem(visitorKey)) {
+                localStorage.setItem(visitorKey, 'true');
+                database.ref('istatistikler/ziyaretci').transaction(count => (count || 0) + 1);
+                database.ref('istatistikler/gunluk/' + today).transaction(count => (count || 0) + 1);
+            }
+            
+            database.ref('istatistikler/sayfaGoruntuleme').transaction(count => (count || 0) + 1);
+        }
+        
+        // Animasyonları başlat
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(typeTerminal, 500);
+            initThemeToggle();
+            initBackToTop();
+            trackVisitor();
+        });
     </script>
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle" title="Tema Değiştir">
+        <i class="fas fa-sun"></i>
+    </button>
+    
+    <!-- Back to Top Button -->
+    <button id="back-to-top" title="Yukarı Çık">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 </body>
 </html>

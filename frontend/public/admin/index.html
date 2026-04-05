@@ -51,6 +51,9 @@
                 <a href="#" class="nav-item" data-section="contact">
                     <i class="fas fa-envelope"></i> Iletisim
                 </a>
+                <a href="#" class="nav-item" data-section="blog">
+                    <i class="fas fa-pen-fancy"></i> Yazılar
+                </a>
                 <a href="#" class="nav-item" data-section="cv">
                     <i class="fas fa-file-pdf"></i> CV Yönetimi
                 </a>
@@ -93,6 +96,36 @@
                         <div>
                             <h3 id="total-images">0</h3>
                             <p>Gorsel</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-pen-fancy"></i>
+                        <div>
+                            <h3 id="total-blogs">0</h3>
+                            <p>Yazı</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="stats-grid" style="margin-bottom: 2rem;">
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <h3 id="total-visitors">0</h3>
+                            <p>Toplam Ziyaretçi</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-eye"></i>
+                        <div>
+                            <h3 id="page-views">0</h3>
+                            <p>Sayfa Görüntüleme</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-calendar-day"></i>
+                        <div>
+                            <h3 id="today-visitors">0</h3>
+                            <p>Bugünkü Ziyaret</p>
                         </div>
                     </div>
                 </div>
@@ -218,6 +251,22 @@
                     <div class="form-group">
                         <label for="contact-website"><i class="fas fa-globe"></i> Kisisel Website</label>
                         <input type="url" id="contact-website" placeholder="https://benimsite.com">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Blog Section -->
+            <section id="blog-section" class="content-section">
+                <div class="section-header">
+                    <h1>Yazılar</h1>
+                    <button class="btn" onclick="openBlogModal()">
+                        <i class="fas fa-plus"></i> Yeni Yazı
+                    </button>
+                </div>
+                <div id="blog-list" class="blog-list-admin">
+                    <div class="loading">
+                        <i class="fas fa-spinner"></i>
+                        <p>Yazılar yükleniyor...</p>
                     </div>
                 </div>
             </section>
@@ -357,6 +406,85 @@
                     
                     <div class="form-actions">
                         <button type="button" class="btn btn-outline" onclick="closeProjectModal()">Iptal</button>
+                        <button type="submit" class="btn">
+                            <i class="fas fa-save"></i> Kaydet
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Modal -->
+    <div class="modal-overlay" id="blog-modal">
+        <div class="modal admin-modal">
+            <button class="modal-close" onclick="closeBlogModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-content">
+                <h2 id="blog-modal-title">Yeni Yazı</h2>
+                <form id="blog-form">
+                    <input type="hidden" id="blog-id">
+                    
+                    <div class="form-group">
+                        <label for="blog-title">Başlık *</label>
+                        <input type="text" id="blog-title" required placeholder="Yazı başlığı">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="blog-category">Kategori</label>
+                        <select id="blog-category">
+                            <option value="Genel">Genel</option>
+                            <option value="Web Geliştirme">Web Geliştirme</option>
+                            <option value="Mobil">Mobil</option>
+                            <option value="Backend">Backend</option>
+                            <option value="DevOps">DevOps</option>
+                            <option value="Yapay Zeka">Yapay Zeka</option>
+                            <option value="Kariyer">Kariyer</option>
+                            <option value="Diğer">Diğer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="blog-summary">Özet *</label>
+                        <textarea id="blog-summary" rows="2" required placeholder="Kısa özet (liste sayfasında görünecek)"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="blog-content">İçerik (HTML destekler)</label>
+                        <textarea id="blog-content" rows="12" placeholder="<p>Yazı içeriği...</p>&#10;<h2>Alt Başlık</h2>&#10;<p>Devamı...</p>"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="blog-read-time">Okuma Süresi (dk)</label>
+                            <input type="number" id="blog-read-time" placeholder="5" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="blog-tags">Etiketler (virgülle ayır)</label>
+                            <input type="text" id="blog-tags" placeholder="javascript, react, web">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Kapak Fotoğrafı</label>
+                        <div class="image-upload-area">
+                            <input type="file" id="blog-cover" accept="image/*" onchange="previewBlogCover(this)">
+                            <label for="blog-cover" class="upload-placeholder">
+                                <i class="fas fa-image"></i>
+                                <p>Kapak fotoğrafı seçin</p>
+                            </label>
+                        </div>
+                        <div id="blog-cover-preview" class="blog-cover-preview" style="display: none;">
+                            <img id="blog-cover-img" src="" alt="Kapak">
+                            <button type="button" class="btn-delete" onclick="clearBlogCover()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="closeBlogModal()">İptal</button>
                         <button type="submit" class="btn">
                             <i class="fas fa-save"></i> Kaydet
                         </button>

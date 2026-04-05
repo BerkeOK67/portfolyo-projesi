@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yazı - Berke OK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">Berke OK</a>
+            <nav>
+                <a href="index.html">Anasayfa</a>
+                <a href="projeler.html">Projeler</a>
+                <a href="yazilar.html">Yazılar</a>
+                <a href="hakkimda.html">Hakkımda</a>
+                <a href="iletisim.html">İletişim</a>
+            </nav>
+            <div class="social-links" id="social-links">
+                <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Blog Post Content -->
+    <article class="blog-detail-page">
+        <div class="blog-detail-container" id="blog-detail">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Yazı yükleniyor...</p>
+            </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Berke OK. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const yaziId = urlParams.get('id');
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            const container = document.getElementById('blog-detail');
+            
+            if (!yaziId) {
+                container.innerHTML = `
+                    <div class="post-not-found">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h2>Yazı Bulunamadı</h2>
+                        <p>Aradığınız yazı mevcut değil.</p>
+                        <a href="yazilar.html" class="btn"><i class="fas fa-arrow-left"></i> Yazılara Dön</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Verileri paralel çek
+            const [yazilarSnapshot, iletisimSnapshot] = await Promise.all([
+                database.ref('yazilar').once('value'),
+                database.ref('iletisim').once('value')
+            ]);
+            
+            // Yazıyı bul
+            const yazilarData = yazilarSnapshot.val();
+            let yazi = null;
+            
+            if (yazilarData) {
+                const yazilar = Object.values(yazilarData);
+                yazi = yazilar.find(y => y.id == yaziId);
+            }
+            
+            if (!yazi) {
+                container.innerHTML = `
+                    <div class="post-not-found">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h2>Yazı Bulunamadı</h2>
+                        <p>Aradığınız yazı mevcut değil.</p>
+                        <a href="yazilar.html" class="btn"><i class="fas fa-arrow-left"></i> Yazılara Dön</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sayfa başlığını güncelle
+            document.title = `${yazi.baslik} - Berke OK`;
+            
+            container.innerHTML = `
+                <a href="yazilar.html" class="back-link"><i class="fas fa-arrow-left"></i> Tüm Yazılar</a>
+                
+                <header class="blog-detail-header">
+                    <div class="blog-meta">
+                        <span class="blog-category"><i class="fas fa-folder"></i> ${yazi.kategori || 'Genel'}</span>
+                        <span class="blog-date"><i class="fas fa-calendar"></i> ${formatDate(yazi.tarih)}</span>
+                        <span class="read-time"><i class="fas fa-clock"></i> ${yazi.okumaSuresi || '5'} dk okuma</span>
+                    </div>
+                    <h1>${yazi.baslik}</h1>
+                    ${yazi.ozet ? `<p class="blog-excerpt">${yazi.ozet}</p>` : ''}
+                </header>
+                
+                ${yazi.kapakFoto ? `<img src="${yazi.kapakFoto}" alt="${yazi.baslik}" class="blog-detail-image">` : ''}
+                
+                <div class="blog-detail-content">
+                    ${yazi.icerik || '<p>İçerik bulunamadı.</p>'}
+                </div>
+                
+                ${yazi.etiketler && yazi.etiketler.length > 0 ? `
+                    <div class="blog-tags">
+                        ${yazi.etiketler.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                    </div>
+                ` : ''}
+                
+                <div class="blog-share">
+                    <span>Paylaş:</span>
+                    <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(yazi.baslik)}" target="_blank" class="share-btn twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(yazi.baslik)}" target="_blank" class="share-btn linkedin"><i class="fab fa-linkedin"></i></a>
+                </div>
+            `;
+            
+            // Sosyal medya linklerini yükle
+            const iletisimData = iletisimSnapshot.val();
+            if (iletisimData) {
+                const socialLinks = document.getElementById('social-links');
+                let html = '';
+                if (iletisimData.github) html += `<a href="${iletisimData.github}" target="_blank"><i class="fab fa-github"></i></a>`;
+                if (iletisimData.linkedin) html += `<a href="${iletisimData.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>`;
+                if (iletisimData.twitter) html += `<a href="${iletisimData.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
+                if (iletisimData.instagram) html += `<a href="${iletisimData.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+                if (html) socialLinks.innerHTML = html;
+            }
+        });
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proje Detayı - Berke OK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">Berke OK</a>
+            <nav>
+                <a href="index.html">Anasayfa</a>
+                <a href="projeler.html">Projeler</a>
+                <a href="yazilar.html">Yazılar</a>
+                <a href="hakkimda.html">Hakkımda</a>
+                <a href="iletisim.html">İletişim</a>
+            </nav>
+            <div class="social-links" id="social-links">
+                <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Project Detail Content -->
+    <div class="project-detail-page">
+        <div class="project-detail-container" id="project-detail">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Proje yükleniyor...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Berke OK. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <script>
+        // URL'den proje ID'sini al
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('id');
+        
+        // Gallery değişkenleri
+        let currentGalleryImages = [];
+        let currentGalleryIndex = 0;
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            const container = document.getElementById('project-detail');
+            
+            if (!projectId) {
+                container.innerHTML = `
+                    <div class="project-not-found">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h2>Proje Bulunamadı</h2>
+                        <p>Aradığınız proje mevcut değil.</p>
+                        <a href="projeler.html" class="btn"><i class="fas fa-arrow-left"></i> Projelere Dön</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Verileri paralel çek
+            const [projelerSnapshot, iletisimSnapshot] = await Promise.all([
+                database.ref('projeler').once('value'),
+                database.ref('iletisim').once('value')
+            ]);
+            
+            // Projeyi bul
+            const projelerData = projelerSnapshot.val();
+            let project = null;
+            
+            if (projelerData) {
+                const projects = Array.isArray(projelerData) 
+                    ? projelerData.filter(p => p) 
+                    : Object.values(projelerData);
+                project = projects.find(p => p.id == projectId);
+            }
+            
+            if (!project) {
+                container.innerHTML = `
+                    <div class="project-not-found">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h2>Proje Bulunamadı</h2>
+                        <p>Aradığınız proje mevcut değil.</p>
+                        <a href="projeler.html" class="btn"><i class="fas fa-arrow-left"></i> Projelere Dön</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sayfa başlığını güncelle
+            document.title = `${project.isim} - Berke OK`;
+            
+            // Görselleri hazırla
+            let images = [];
+            if (project.gorseller && project.gorseller.length > 0) {
+                images = project.gorseller;
+            } else if (project.kapakFotografi) {
+                images = [project.kapakFotografi];
+            } else {
+                images = ['https://via.placeholder.com/800x400/667eea/ffffff?text=Proje'];
+            }
+            currentGalleryImages = images;
+            
+            // Proje detayını render et
+            container.innerHTML = `
+                <a href="projeler.html" class="back-link"><i class="fas fa-arrow-left"></i> Tüm Projeler</a>
+                
+                <div class="project-detail-header">
+                    <h1>${project.isim}</h1>
+                    ${project.oneCikan ? '<span class="featured-badge"><i class="fas fa-star"></i> Öne Çıkan</span>' : ''}
+                </div>
+                
+                <div class="project-detail-gallery">
+                    <div class="gallery-main">
+                        <img src="${images[0]}" alt="${project.isim}" id="gallery-main-image" class="gallery-main-image">
+                        ${images.length > 1 ? `
+                            <button class="gallery-nav-btn prev" onclick="changeImage(-1)"><i class="fas fa-chevron-left"></i></button>
+                            <button class="gallery-nav-btn next" onclick="changeImage(1)"><i class="fas fa-chevron-right"></i></button>
+                        ` : ''}
+                    </div>
+                    ${images.length > 1 ? `
+                        <div class="gallery-thumbs" id="gallery-thumbs">
+                            ${images.map((img, i) => `
+                                <div class="gallery-thumb ${i === 0 ? 'active' : ''}" onclick="goToImage(${i})">
+                                    <img src="${img}" alt="Thumbnail ${i + 1}">
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div class="project-detail-content">
+                    <div class="project-detail-main">
+                        <div class="detail-section">
+                            <h3>Proje Hakkında</h3>
+                            <p>${project.aciklama || 'Açıklama bulunmuyor.'}</p>
+                        </div>
+                        
+                        ${project.detaylar ? `
+                            <div class="detail-section">
+                                <h3>Detaylı Açıklama</h3>
+                                <p>${project.detaylar}</p>
+                            </div>
+                        ` : ''}
+                        
+                        ${project.ozellikler && project.ozellikler.length > 0 ? `
+                            <div class="detail-section">
+                                <h3>Özellikler</h3>
+                                <ul class="features-list">
+                                    ${project.ozellikler.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="project-detail-sidebar">
+                        ${project.teknolojiler && project.teknolojiler.length > 0 ? `
+                            <div class="sidebar-section">
+                                <h4>Kullanılan Teknolojiler</h4>
+                                <div class="tech-tags">
+                                    ${project.teknolojiler.map(tech => `<span>${tech}</span>`).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="sidebar-section">
+                            <h4>Bağlantılar</h4>
+                            <div class="project-links-vertical">
+                                ${project.canliLink ? `
+                                    <a href="${project.canliLink}" target="_blank" class="btn">
+                                        <i class="fas fa-external-link-alt"></i> Canlı Demo
+                                    </a>
+                                ` : ''}
+                                ${project.githubLink ? `
+                                    <a href="${project.githubLink}" target="_blank" class="btn btn-outline">
+                                        <i class="fab fa-github"></i> GitHub
+                                    </a>
+                                ` : ''}
+                                ${!project.canliLink && !project.githubLink ? '<p class="no-links">Bağlantı bulunmuyor.</p>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Sosyal medya linklerini yükle
+            const iletisimData = iletisimSnapshot.val();
+            if (iletisimData) {
+                const socialLinks = document.getElementById('social-links');
+                let html = '';
+                if (iletisimData.github) html += `<a href="${iletisimData.github}" target="_blank"><i class="fab fa-github"></i></a>`;
+                if (iletisimData.linkedin) html += `<a href="${iletisimData.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>`;
+                if (iletisimData.twitter) html += `<a href="${iletisimData.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
+                if (iletisimData.instagram) html += `<a href="${iletisimData.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+                if (html) socialLinks.innerHTML = html;
+            }
+        });
+        
+        // Gallery fonksiyonları
+        function changeImage(direction) {
+            currentGalleryIndex += direction;
+            if (currentGalleryIndex < 0) currentGalleryIndex = currentGalleryImages.length - 1;
+            if (currentGalleryIndex >= currentGalleryImages.length) currentGalleryIndex = 0;
+            updateGallery();
+        }
+        
+        function goToImage(index) {
+            currentGalleryIndex = index;
+            updateGallery();
+        }
+        
+        function updateGallery() {
+            document.getElementById('gallery-main-image').src = currentGalleryImages[currentGalleryIndex];
+            document.querySelectorAll('.gallery-thumb').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === currentGalleryIndex);
+            });
+        }
+    </script>
+</body>
+</html>

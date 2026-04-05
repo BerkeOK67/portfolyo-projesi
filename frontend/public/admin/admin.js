@@ -52,6 +52,7 @@ auth.onAuthStateChanged((user) => {
         document.getElementById('admin-panel').style.display = 'flex';
         loadDashboard();
         loadProjects();
+        loadBlog();
         loadAbout();
         loadContact();
         loadCV();
@@ -91,22 +92,47 @@ function showSection(sectionName) {
 
 // ==================== DASHBOARD ====================
 
-function loadDashboard() {
-    database.ref('projeler').once('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            const projects = Array.isArray(data) ? data.filter(p => p) : Object.values(data);
-            document.getElementById('total-projects').textContent = projects.length;
-            document.getElementById('featured-projects').textContent = projects.filter(p => p.oneCikan).length;
-            
-            let totalImages = 0;
-            projects.forEach(p => {
-                if (p.gorseller) totalImages += p.gorseller.length;
-                else if (p.kapakFotografi) totalImages += 1;
-            });
-            document.getElementById('total-images').textContent = totalImages;
-        }
-    });
+async function loadDashboard() {
+    const [projelerSnapshot, yazilarSnapshot] = await Promise.all([
+        database.ref('projeler').once('value'),
+        database.ref('yazilar').once('value')
+    ]);
+    
+    const projelerData = projelerSnapshot.val();
+    if (projelerData) {
+        const projects = Array.isArray(projelerData) ? projelerData.filter(p => p) : Object.values(projelerData);
+        document.getElementById('total-projects').textContent = projects.length;
+        document.getElementById('featured-projects').textContent = projects.filter(p => p.oneCikan).length;
+        
+        let totalImages = 0;
+        projects.forEach(p => {
+            if (p.gorseller) totalImages += p.gorseller.length;
+            else if (p.kapakFotografi) totalImages += 1;
+        });
+        document.getElementById('total-images').textContent = totalImages;
+    }
+    
+    const yazilarData = yazilarSnapshot.val();
+    const totalBlogsEl = document.getElementById('total-blogs');
+    if (totalBlogsEl) {
+        totalBlogsEl.textContent = yazilarData ? Object.values(yazilarData).length : 0;
+    }
+    
+    // Ziyaretçi istatistikleri
+    const istatistiklerSnapshot = await database.ref('istatistikler').once('value');
+    const istatistikler = istatistiklerSnapshot.val() || {};
+    
+    const totalVisitorsEl = document.getElementById('total-visitors');
+    const pageViewsEl = document.getElementById('page-views');
+    const todayVisitorsEl = document.getElementById('today-visitors');
+    
+    if (totalVisitorsEl) totalVisitorsEl.textContent = istatistikler.ziyaretci || 0;
+    if (pageViewsEl) pageViewsEl.textContent = istatistikler.sayfaGoruntuleme || 0;
+    
+    const today = new Date().toISOString().split('T')[0];
+    if (todayVisitorsEl && istatistikler.gunluk) {
+        todayVisitorsEl.textContent = istatistikler.gunluk[today] || 0;
+    }
 }
 
 // ==================== PROJECTS ====================
@@ -152,6 +178,7 @@ function openProjectModal(projectId = null) {
     editingProjectId = projectId;
     projectImages = [];
     coverImageIndex = 0;
+    imagesToDelete = [];
     
     document.getElementById('project-form').reset();
     document.getElementById('image-preview-container').innerHTML = '';
@@ -211,31 +238,90 @@ async function deleteProject(id) {
         const data = snapshot.val();
         let projects = Array.isArray(data) ? data.filter(p => p) : Object.values(data);
         
+        // Silinecek projeyi bul ve görsellerini sil
+        const projectToDelete = projects.find(p => p.id == id);
+        if (projectToDelete) {
+            await deleteImagesFromStorage(projectToDelete.gorseller || []);
+            if (projectToDelete.kapakFotografi && !projectToDelete.gorseller?.includes(projectToDelete.kapakFotografi)) {
+                await deleteImageFromStorage(projectToDelete.kapakFotografi);
+            }
+        }
+        
         projects = projects.filter(p => p.id != id);
         
         await database.ref('projeler').set(projects);
-        showToast('Proje silindi', 'success');
+        showToast('Proje ve görselleri silindi', 'success');
         loadDashboard();
     } catch (error) {
         showToast('Hata: ' + error.message, 'error');
     }
 }
 
+// Firebase Storage'dan görsel silme
+async function deleteImageFromStorage(url) {
+    if (!url || !url.includes('firebasestorage.googleapis.com')) return;
+    
+    try {
+        const path = decodeURIComponent(url.split('/o/')[1].split('?')[0]);
+        await storage.ref(path).delete();
+    } catch (error) {
+        console.log('Görsel silinemedi:', error.message);
+    }
+}
+
+async function deleteImagesFromStorage(urls) {
+    for (const url of urls) {
+        await deleteImageFromStorage(url);
+    }
+}
+
+// WebP Dönüştürme Fonksiyonu
+function convertToWebP(file, quality = 0.85) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        const webpFile = new File([blob], file.name.replace(/\.[^.]+$/, '.webp'), {
+                            type: 'image/webp'
+                        });
+                        resolve(webpFile);
+                    } else {
+                        resolve(file);
+                    }
+                }, 'image/webp', quality);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
 // Image handling
-function handleImageUpload(input) {
+async function handleImageUpload(input) {
     const files = Array.from(input.files);
     
-    files.forEach(file => {
+    for (const file of files) {
+        const webpFile = await convertToWebP(file);
         const reader = new FileReader();
         reader.onload = (e) => {
             projectImages.push({
                 url: e.target.result,
-                file: file
+                file: webpFile
             });
             renderImagePreviews();
         };
-        reader.readAsDataURL(file);
-    });
+        reader.readAsDataURL(webpFile);
+    }
     
     input.value = '';
 }
@@ -258,8 +344,14 @@ function setCoverImage(index) {
     renderImagePreviews();
 }
 
+let imagesToDelete = [];
+
 function removeImage(index) {
-    projectImages.splice(index, 1);
+    const removed = projectImages.splice(index, 1)[0];
+    // Eğer bu mevcut bir URL ise (yeni yüklenen değil), silme listesine ekle
+    if (removed && removed.url && !removed.file && removed.url.includes('firebasestorage.googleapis.com')) {
+        imagesToDelete.push(removed.url);
+    }
     if (coverImageIndex >= projectImages.length) {
         coverImageIndex = Math.max(0, projectImages.length - 1);
     }
@@ -275,6 +367,12 @@ document.getElementById('project-form').addEventListener('submit', async (e) => 
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kaydediliyor...';
     
     try {
+        // Silinen görselleri Storage'dan kaldır
+        if (imagesToDelete.length > 0) {
+            await deleteImagesFromStorage(imagesToDelete);
+            imagesToDelete = [];
+        }
+        
         // Upload new images
         const uploadedUrls = [];
         for (const img of projectImages) {
@@ -433,13 +531,18 @@ function updateIconPreview(select) {
     preview.className = 'fas ' + select.value;
 }
 
-function previewProfileImage(input) {
+async function previewProfileImage(input) {
     if (input.files && input.files[0]) {
+        const webpFile = await convertToWebP(input.files[0]);
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(webpFile);
+        input.files = dataTransfer.files;
+        
         const reader = new FileReader();
         reader.onload = (e) => {
             document.getElementById('profile-preview').src = e.target.result;
         };
-        reader.readAsDataURL(input.files[0]);
+        reader.readAsDataURL(webpFile);
     }
 }
 
@@ -654,6 +757,203 @@ async function saveContact() {
     }
 }
 
+// ==================== BLOG ====================
+
+let editingBlogId = null;
+let selectedBlogCover = null;
+
+function loadBlog() {
+    const container = document.getElementById('blog-list');
+    
+    database.ref('yazilar').on('value', (snapshot) => {
+        const data = snapshot.val();
+        
+        if (!data) {
+            container.innerHTML = '<p class="loading">Henüz yazı yok. Yeni yazı ekleyin.</p>';
+            return;
+        }
+        
+        const yazilar = Object.values(data).sort((a, b) => new Date(b.tarih) - new Date(a.tarih));
+        
+        container.innerHTML = yazilar.map(yazi => `
+            <div class="blog-item">
+                ${yazi.kapakFoto ? `<img src="${yazi.kapakFoto}" alt="${yazi.baslik}" class="blog-item-image">` : 
+                    `<div class="blog-item-image no-image"><i class="fas fa-image"></i></div>`}
+                <div class="blog-item-info">
+                    <h3>${yazi.baslik}</h3>
+                    <p><span class="blog-item-category">${yazi.kategori || 'Genel'}</span> • ${formatBlogDate(yazi.tarih)}</p>
+                </div>
+                <div class="blog-item-actions">
+                    <button class="btn-edit" onclick="editBlog(${yazi.id})" title="Düzenle">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-delete" onclick="deleteBlog(${yazi.id})" title="Sil">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    });
+}
+
+function formatBlogDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function openBlogModal(blogId = null) {
+    editingBlogId = blogId;
+    selectedBlogCover = null;
+    
+    document.getElementById('blog-form').reset();
+    document.getElementById('blog-cover-preview').style.display = 'none';
+    document.getElementById('blog-modal-title').textContent = blogId ? 'Yazı Düzenle' : 'Yeni Yazı';
+    document.getElementById('blog-id').value = blogId || '';
+    
+    if (blogId) {
+        database.ref('yazilar').once('value', (snapshot) => {
+            const data = snapshot.val();
+            const yazilar = Object.values(data);
+            const yazi = yazilar.find(y => y.id == blogId);
+            
+            if (yazi) {
+                document.getElementById('blog-title').value = yazi.baslik || '';
+                document.getElementById('blog-category').value = yazi.kategori || 'Genel';
+                document.getElementById('blog-summary').value = yazi.ozet || '';
+                document.getElementById('blog-content').value = yazi.icerik || '';
+                document.getElementById('blog-read-time').value = yazi.okumaSuresi || '';
+                document.getElementById('blog-tags').value = (yazi.etiketler || []).join(', ');
+                
+                if (yazi.kapakFoto) {
+                    document.getElementById('blog-cover-img').src = yazi.kapakFoto;
+                    document.getElementById('blog-cover-preview').style.display = 'flex';
+                    selectedBlogCover = { url: yazi.kapakFoto, file: null };
+                }
+            }
+        });
+    }
+    
+    document.getElementById('blog-modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeBlogModal() {
+    document.getElementById('blog-modal').classList.remove('active');
+    document.body.style.overflow = '';
+    editingBlogId = null;
+    selectedBlogCover = null;
+}
+
+function editBlog(id) {
+    openBlogModal(id);
+}
+
+async function deleteBlog(id) {
+    if (!confirm('Bu yazıyı silmek istediğinizden emin misiniz?')) return;
+    
+    try {
+        const snapshot = await database.ref('yazilar').once('value');
+        const data = snapshot.val();
+        let yazilar = Object.values(data);
+        
+        // Silinecek yazının kapak fotoğrafını sil
+        const yaziToDelete = yazilar.find(y => y.id == id);
+        if (yaziToDelete && yaziToDelete.kapakFoto) {
+            await deleteImageFromStorage(yaziToDelete.kapakFoto);
+        }
+        
+        yazilar = yazilar.filter(y => y.id != id);
+        
+        await database.ref('yazilar').set(yazilar.length > 0 ? yazilar : null);
+        showToast('Yazı ve görseli silindi', 'success');
+        loadDashboard();
+    } catch (error) {
+        showToast('Hata: ' + error.message, 'error');
+    }
+}
+
+async function previewBlogCover(input) {
+    if (input.files && input.files[0]) {
+        const webpFile = await convertToWebP(input.files[0]);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            document.getElementById('blog-cover-img').src = e.target.result;
+            document.getElementById('blog-cover-preview').style.display = 'flex';
+            selectedBlogCover = { url: e.target.result, file: webpFile };
+        };
+        reader.readAsDataURL(webpFile);
+    }
+}
+
+function clearBlogCover() {
+    selectedBlogCover = null;
+    document.getElementById('blog-cover').value = '';
+    document.getElementById('blog-cover-preview').style.display = 'none';
+}
+
+document.getElementById('blog-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kaydediliyor...';
+    
+    try {
+        let coverUrl = '';
+        
+        if (selectedBlogCover) {
+            if (selectedBlogCover.file) {
+                const fileName = `blog/${Date.now()}_${selectedBlogCover.file.name}`;
+                const ref = storage.ref(fileName);
+                await ref.put(selectedBlogCover.file);
+                coverUrl = await ref.getDownloadURL();
+            } else {
+                coverUrl = selectedBlogCover.url;
+            }
+        }
+        
+        const blogData = {
+            baslik: document.getElementById('blog-title').value,
+            kategori: document.getElementById('blog-category').value,
+            ozet: document.getElementById('blog-summary').value,
+            icerik: document.getElementById('blog-content').value,
+            okumaSuresi: document.getElementById('blog-read-time').value || '5',
+            etiketler: document.getElementById('blog-tags').value.split(',').map(t => t.trim()).filter(t => t),
+            kapakFoto: coverUrl,
+            tarih: new Date().toISOString()
+        };
+        
+        const snapshot = await database.ref('yazilar').once('value');
+        const data = snapshot.val();
+        let yazilar = data ? Object.values(data) : [];
+        
+        if (editingBlogId) {
+            const index = yazilar.findIndex(y => y.id == editingBlogId);
+            if (index !== -1) {
+                blogData.id = editingBlogId;
+                blogData.tarih = yazilar[index].tarih;
+                yazilar[index] = blogData;
+            }
+        } else {
+            const maxId = yazilar.reduce((max, y) => Math.max(max, y.id || 0), 0);
+            blogData.id = maxId + 1;
+            yazilar.push(blogData);
+        }
+        
+        await database.ref('yazilar').set(yazilar);
+        
+        closeBlogModal();
+        showToast('Yazı kaydedildi', 'success');
+        loadDashboard();
+        
+    } catch (error) {
+        showToast('Hata: ' + error.message, 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> Kaydet';
+    }
+});
+
 // ==================== CV ====================
 
 function loadCV() {
@@ -762,6 +1062,18 @@ async function deleteCV() {
     if (!confirm('CV\'yi silmek istediğinizden emin misiniz?')) return;
     
     try {
+        // Önce mevcut CV URL'ini al ve Storage'dan sil
+        const snapshot = await database.ref('cv').once('value');
+        const cvData = snapshot.val();
+        if (cvData && cvData.url) {
+            try {
+                const path = decodeURIComponent(cvData.url.split('/o/')[1].split('?')[0]);
+                await storage.ref(path).delete();
+            } catch (e) {
+                console.log('CV dosyası silinemedi:', e.message);
+            }
+        }
+        
         await database.ref('cv').remove();
         showToast('CV silindi', 'success');
         loadCV();

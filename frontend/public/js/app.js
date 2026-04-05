@@ -1,7 +1,7 @@
 // Proje karti HTML olustur
 function createProjectCard(project, showDetailButton = true) {
     return `
-        <div class="project-card" ${showDetailButton ? `onclick="openModal(${project.id})"` : ''}>
+        <div class="project-card" ${showDetailButton ? `onclick="window.location.href='proje-detay.html?id=${project.id}'"` : ''}>
             <div class="project-image-wrapper">
                 <div class="image-placeholder">
                     <i class="fas fa-image"></i>
@@ -12,6 +12,11 @@ function createProjectCard(project, showDetailButton = true) {
                      loading="lazy"
                      onload="this.classList.add('loaded')"
                      onerror="this.src='https://via.placeholder.com/400x250/667eea/ffffff?text=Gorsel+Yok'; this.classList.add('loaded')">
+                ${showDetailButton ? `
+                <div class="project-hover-overlay">
+                    <span><i class="fas fa-eye"></i> Detaylar için tıklayın</span>
+                </div>
+                ` : ''}
             </div>
             <div class="project-content">
                 <h3>${project.isim}</h3>

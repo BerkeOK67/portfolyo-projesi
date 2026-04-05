@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yazılarım - Berke OK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">Berke OK</a>
+            <nav>
+                <a href="index.html">Anasayfa</a>
+                <a href="projeler.html">Projeler</a>
+                <a href="yazilar.html" class="active">Yazılar</a>
+                <a href="hakkimda.html">Hakkımda</a>
+                <a href="iletisim.html">İletişim</a>
+            </nav>
+            <div class="social-links" id="social-links">
+                <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>Yazılarım</h1>
+        <p>Teknik yazılar, deneyimler ve öğrendiklerim</p>
+    </div>
+
+    <!-- Blog Posts -->
+    <section class="section">
+        <div id="blog-posts" class="blog-grid">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Yazılar yükleniyor...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Berke OK. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const container = document.getElementById('blog-posts');
+            
+            // Verileri paralel çek
+            const [yazilarSnapshot, iletisimSnapshot] = await Promise.all([
+                database.ref('yazilar').once('value'),
+                database.ref('iletisim').once('value')
+            ]);
+            
+            // Yazıları yükle
+            const yazilarData = yazilarSnapshot.val();
+            
+            if (yazilarData) {
+                const yazilar = Object.values(yazilarData).sort((a, b) => 
+                    new Date(b.tarih) - new Date(a.tarih)
+                );
+                
+                if (yazilar.length > 0) {
+                    container.innerHTML = yazilar.map(yazi => `
+                        <article class="blog-card" onclick="window.location.href='yazi-detay.html?id=${yazi.id}'">
+                            ${yazi.kapakFoto ? `<img src="${yazi.kapakFoto}" alt="${yazi.baslik}" class="blog-image">` : ''}
+                            <div class="blog-content">
+                                <div class="blog-meta">
+                                    <span class="blog-category"><i class="fas fa-folder"></i> ${yazi.kategori || 'Genel'}</span>
+                                    <span class="blog-date"><i class="fas fa-calendar"></i> ${formatDate(yazi.tarih)}</span>
+                                </div>
+                                <h2>${yazi.baslik}</h2>
+                                <p>${yazi.ozet || ''}</p>
+                                <div class="blog-footer">
+                                    <span class="read-time"><i class="fas fa-clock"></i> ${yazi.okumaSuresi || '5'} dk okuma</span>
+                                    <span class="read-more">Devamını Oku <i class="fas fa-arrow-right"></i></span>
+                                </div>
+                            </div>
+                        </article>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<div class="no-posts"><p>Henüz yazı eklenmemiş.</p></div>';
+                }
+            } else {
+                container.innerHTML = '<div class="no-posts"><i class="fas fa-pen-fancy"></i><p>Henüz yazı eklenmemiş.</p><small>Yakında yeni yazılar eklenecek!</small></div>';
+            }
+            
+            // Sosyal medya linklerini yükle
+            const iletisimData = iletisimSnapshot.val();
+            if (iletisimData) {
+                const socialLinks = document.getElementById('social-links');
+                let html = '';
+                if (iletisimData.github) html += `<a href="${iletisimData.github}" target="_blank"><i class="fab fa-github"></i></a>`;
+                if (iletisimData.linkedin) html += `<a href="${iletisimData.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>`;
+                if (iletisimData.twitter) html += `<a href="${iletisimData.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
+                if (iletisimData.instagram) html += `<a href="${iletisimData.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+                if (html) socialLinks.innerHTML = html;
+            }
+        });
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+    </script>
+</body>
+</html>
