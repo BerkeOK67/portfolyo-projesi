@@ -13,6 +13,40 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
+/** Anasayfadaki main-footer alanını iletişim verisiyle doldurur (tüm sayfalarda kullanılır) */
+function populateMainFooter(data) {
+    if (!data || typeof data !== 'object') return;
+
+    const emailRaw = data.email ?? data.eposta ?? data.ePosta ?? data.mail ?? '';
+    const email = typeof emailRaw === 'string' ? emailRaw.trim() : String(emailRaw || '').trim();
+    const konum = typeof data.konum === 'string' ? data.konum.trim() : String(data.konum || '').trim();
+    const gh = typeof data.github === 'string' ? data.github.trim() : String(data.github || '').trim();
+    const li = typeof data.linkedin === 'string' ? data.linkedin.trim() : String(data.linkedin || '').trim();
+    const tw = typeof data.twitter === 'string' ? data.twitter.trim() : String(data.twitter || '').trim();
+    const ig = typeof data.instagram === 'string' ? data.instagram.trim() : String(data.instagram || '').trim();
+
+    const emailEl = document.getElementById('footer-email');
+    const locEl = document.getElementById('footer-location');
+    const footerSocial = document.getElementById('footer-social');
+
+    if (emailEl && email) {
+        emailEl.textContent = email;
+        if (emailEl.tagName === 'A') {
+            emailEl.href = 'mailto:' + email;
+        }
+    }
+    if (locEl && konum) locEl.textContent = konum;
+
+    if (footerSocial) {
+        let html = '';
+        if (gh) html += `<a href="${gh}" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>`;
+        if (li) html += `<a href="${li}" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>`;
+        if (tw) html += `<a href="${tw}" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>`;
+        if (ig) html += `<a href="${ig}" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>`;
+        if (html) footerSocial.innerHTML = html;
+    }
+}
+
 // Tum projeleri cek
 function getProjects(callback) {
     database.ref('projeler').on('value', (snapshot) => {

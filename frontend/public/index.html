@@ -174,7 +174,7 @@
         <h2 class="section-title">Bana Ulaşın</h2>
         <p class="section-subtitle">Bir projeniz mi var? Soru sormak mı istiyorsunuz? Aşağıdaki formu doldurun, en kısa sürede dönüş yapacağım.</p>
         <div class="contact-form-wrapper">
-            <form id="home-contact-form" class="contact-form-inline">
+            <form id="home-contact-form" class="contact-form">
                 <div class="form-row-inline">
                     <div class="form-group">
                         <label for="home-name">Adınız</label>
@@ -229,7 +229,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 Berke OK. Tüm hakları saklıdır. | <a href="#">Gizlilik Politikası</a></p>
+            <p>&copy; 2026 Berke OK. Tüm hakları saklıdır.</p>
         </div>
     </footer>
 
@@ -256,80 +256,75 @@
                 database.ref('iletisim').once('value')
             ]);
             
-            // Projeleri isle
-            const projelerData = projelerSnapshot.val();
-            if (projelerData) {
-                const projects = Array.isArray(projelerData) 
-                    ? projelerData.filter(p => p && p.oneCikan) 
-                    : Object.values(projelerData).filter(p => p && p.oneCikan);
-                
-                if (projects.length > 0) {
-                    // Önce opacity 0 ile gizle, sonra göster
-                    grid.style.opacity = '0';
-                    grid.innerHTML = projects.slice(0, 3).map(project => createProjectCard(project)).join('');
-                    // Kısa bir gecikme ile görünür yap
-                    requestAnimationFrame(() => {
-                        grid.style.transition = 'opacity 0.3s ease';
-                        grid.style.opacity = '1';
-                    });
-                } else {
-                    grid.innerHTML = '<div class="loading"><p>Henüz öne çıkan proje yok.</p></div>';
-                }
-            } else {
-                grid.innerHTML = '<div class="loading"><p>Henüz proje eklenmemiş.</p></div>';
-            }
-            
-            // CV linkini isle
-            const cvData = cvSnapshot.val();
-            const cvBtn = document.getElementById('cv-download-btn');
-            if (cvData && cvData.url) {
-                cvBtn.innerHTML = '<i class="fas fa-file-pdf"></i> CV\'mi Görüntüle';
-                cvBtn.style.opacity = '1';
-                cvBtn.style.pointerEvents = 'auto';
-                cvBtn.href = cvData.url;
-                cvBtn.target = '_blank';
-            } else {
-                cvBtn.innerHTML = '<i class="fas fa-times"></i> CV Henüz Yüklenmedi';
-                cvBtn.style.opacity = '0.5';
-                cvBtn.href = '#';
-            }
-            
-            // Iletisim bilgilerini isle
+            // İletişim + footer önce (proje/CV hatası footer'ı engellemesin)
             const iletisimData = iletisimSnapshot.val();
             if (iletisimData) {
-                // Header sosyal linkler
                 const socialLinks = document.getElementById('social-links');
                 let html = '';
                 if (iletisimData.github) html += `<a href="${iletisimData.github}" target="_blank"><i class="fab fa-github"></i></a>`;
                 if (iletisimData.linkedin) html += `<a href="${iletisimData.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>`;
                 if (iletisimData.twitter) html += `<a href="${iletisimData.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
                 if (iletisimData.instagram) html += `<a href="${iletisimData.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
-                if (html) socialLinks.innerHTML = html;
+                if (html && socialLinks) socialLinks.innerHTML = html;
                 
-                // Detayli sosyal linkler
+                populateMainFooter(iletisimData);
+                
                 if (iletisimData.github) {
                     const el = document.getElementById('detail-github');
-                    el.href = iletisimData.github;
-                    el.querySelector('span').textContent = iletisimData.github.replace('https://', '');
+                    if (el) {
+                        el.href = iletisimData.github;
+                        const sp = el.querySelector('span');
+                        if (sp) sp.textContent = String(iletisimData.github).replace(/^https?:\/\//, '');
+                    }
                 }
                 if (iletisimData.linkedin) {
                     const el = document.getElementById('detail-linkedin');
-                    el.href = iletisimData.linkedin;
-                    el.querySelector('span').textContent = iletisimData.linkedin.replace('https://', '');
+                    if (el) {
+                        el.href = iletisimData.linkedin;
+                        const sp = el.querySelector('span');
+                        if (sp) sp.textContent = String(iletisimData.linkedin).replace(/^https?:\/\//, '');
+                    }
                 }
-                
-                // Footer
-                if (iletisimData.email) document.getElementById('footer-email').textContent = iletisimData.email;
-                if (iletisimData.konum) document.getElementById('footer-location').textContent = iletisimData.konum;
-                
-                // Footer sosyal
-                const footerSocial = document.getElementById('footer-social');
-                let footerHtml = '';
-                if (iletisimData.github) footerHtml += `<a href="${iletisimData.github}" target="_blank"><i class="fab fa-github"></i></a>`;
-                if (iletisimData.linkedin) footerHtml += `<a href="${iletisimData.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>`;
-                if (iletisimData.twitter) footerHtml += `<a href="${iletisimData.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
-                if (iletisimData.instagram) footerHtml += `<a href="${iletisimData.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
-                if (footerHtml) footerSocial.innerHTML = footerHtml;
+            }
+            
+            // Projeleri isle
+            const projelerData = projelerSnapshot.val();
+            if (grid) {
+                if (projelerData) {
+                    const projects = Array.isArray(projelerData) 
+                        ? projelerData.filter(p => p && p.oneCikan) 
+                        : Object.values(projelerData).filter(p => p && p.oneCikan);
+                    
+                    if (projects.length > 0) {
+                        grid.style.opacity = '0';
+                        grid.innerHTML = projects.slice(0, 3).map(project => createProjectCard(project)).join('');
+                        requestAnimationFrame(() => {
+                            grid.style.transition = 'opacity 0.3s ease';
+                            grid.style.opacity = '1';
+                        });
+                    } else {
+                        grid.innerHTML = '<div class="loading"><p>Henüz öne çıkan proje yok.</p></div>';
+                    }
+                } else {
+                    grid.innerHTML = '<div class="loading"><p>Henüz proje eklenmemiş.</p></div>';
+                }
+            }
+            
+            // CV linkini isle
+            const cvData = cvSnapshot.val();
+            const cvBtn = document.getElementById('cv-download-btn');
+            if (cvBtn) {
+                if (cvData && cvData.url) {
+                    cvBtn.innerHTML = '<i class="fas fa-file-pdf"></i> CV\'mi Görüntüle';
+                    cvBtn.style.opacity = '1';
+                    cvBtn.style.pointerEvents = 'auto';
+                    cvBtn.href = cvData.url;
+                    cvBtn.target = '_blank';
+                } else {
+                    cvBtn.innerHTML = '<i class="fas fa-times"></i> CV Henüz Yüklenmedi';
+                    cvBtn.style.opacity = '0.5';
+                    cvBtn.href = '#';
+                }
             }
             
             // Veriler yüklendikten sonra animasyonları başlat

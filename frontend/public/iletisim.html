@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle" title="Tema Değiştir">
+        <i class="fas fa-sun"></i>
+    </button>
+    
+    <!-- Back to Top Button -->
+    <button id="back-to-top" title="Yukarı Çık">
+        <i class="fas fa-arrow-up"></i>
+    </button>
     <!-- Header -->
     <header>
         <div class="header-content">
@@ -45,7 +54,7 @@
             </div>
             
             <div class="contact-form">
-                <h3 style="margin-bottom: 1.5rem; color: #e4e4e7;">Mesaj Gönderin</h3>
+                <h3 class="contact-form-title">Mesaj Gönderin</h3>
                 <form id="contact-form">
                     <div class="form-group">
                         <label for="name">Adınız</label>
@@ -76,8 +85,36 @@
     </section>
 
     <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 Berke OK. Tüm hakları saklıdır.</p>
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Berke OK</h3>
+                <p>Full-stack developer olarak modern web teknolojileri ve bulut servisleri ile yenilikçi projeler geliştiriyorum.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Hızlı Erişim</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fas fa-home"></i> Anasayfa</a></li>
+                    <li><a href="projeler.html"><i class="fas fa-code"></i> Projelerim</a></li>
+                    <li><a href="hakkimda.html"><i class="fas fa-user"></i> Ben Kimim</a></li>
+                    <li><a href="iletisim.html"><i class="fas fa-envelope"></i> Bana Ulaşın</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>İletişim</h4>
+                <ul class="footer-contact" id="footer-contact">
+                    <li><i class="fas fa-envelope"></i> <span id="footer-email">yukleniyor...</span></li>
+                    <li><i class="fas fa-map-marker-alt"></i> <span id="footer-location">Türkiye</span></li>
+                </ul>
+                <div class="footer-social" id="footer-social">
+                    <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Berke OK. Tüm hakları saklıdır.</p>
+        </div>
     </footer>
     
     <!-- Firebase SDK -->
@@ -104,6 +141,8 @@
                     contactInfo.innerHTML = html;
                     return;
                 }
+                
+                populateMainFooter(data);
                 
                 // E-posta
                 if (data.email) {
@@ -224,7 +263,7 @@
                 if (data.linkedin) socialHtml += `<a href="${data.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>`;
                 if (data.twitter) socialHtml += `<a href="${data.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
                 if (data.instagram) socialHtml += `<a href="${data.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
-                if (socialHtml) socialLinks.innerHTML = socialHtml;
+                if (socialHtml && socialLinks) socialLinks.innerHTML = socialHtml;
             });
         });
         
@@ -274,6 +313,53 @@
                 setTimeout(() => notification.remove(), 300);
             }, 3000);
         }
+        
+        // Theme Toggle
+        function initThemeToggle() {
+            const toggle = document.getElementById('theme-toggle');
+            if (!toggle) return;
+            
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            updateThemeIcon(currentTheme);
+            
+            toggle.addEventListener('click', () => {
+                const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                updateThemeIcon(theme);
+            });
+        }
+        
+        function updateThemeIcon(theme) {
+            const toggle = document.getElementById('theme-toggle');
+            if (toggle) {
+                toggle.innerHTML = theme === 'dark' 
+                    ? '<i class="fas fa-sun"></i>' 
+                    : '<i class="fas fa-moon"></i>';
+            }
+        }
+        
+        // Back to Top
+        function initBackToTop() {
+            const btn = document.getElementById('back-to-top');
+            if (!btn) return;
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    btn.classList.add('visible');
+                } else {
+                    btn.classList.remove('visible');
+                }
+            });
+            
+            btn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+        
+        initThemeToggle();
+        initBackToTop();
     </script>
 </body>
 </html>
