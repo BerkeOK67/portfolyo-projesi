@@ -1,7 +1,7 @@
 // Proje karti HTML olustur
 function createProjectCard(project, showDetailButton = true) {
     return `
-        <div class="project-card" ${showDetailButton ? `onclick="window.location.href='proje-detay.html?id=${project.id}'"` : ''}>
+        <div class="project-card" ${showDetailButton ? `onclick="window.location.href='/proje-detay?id=${project.id}'"` : ''}>
             <div class="project-image-wrapper">
                 <div class="image-placeholder">
                     <i class="fas fa-image"></i>

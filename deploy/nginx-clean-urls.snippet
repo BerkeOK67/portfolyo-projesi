@@ -1,0 +1,10 @@
+# EC2 Nginx: uzantısız URL (/projeler -> projeler.html)
+# server { ... } içinde, mevcut "location /" bloğunu aşağıdakiyle değiştirin
+# veya root/index ayarlarınızın yanına ekleyin.
+
+location / {
+    try_files $uri $uri.html $uri/ /index.html;
+}
+
+# index.html dosyaları disk üzerinde kalır; tarayıcıda .html görünmez.
+# SSL ve diğer location bloklarınızı olduğu gibi bırakın.
