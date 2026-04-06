@@ -2,6 +2,8 @@
 
 Kisisel portfolyo web sitesi - Projelerimi sergilediklerim, AWS altyapili full-stack uygulama.
 
+Güncel URL : berkeokportfolyo.duckdns.org
+
 ## Teknolojiler
 
 ### Backend
