@@ -3,23 +3,26 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+def get_database_url():
+    """DATABASE_URL ortam degiskenini SQLAlchemy formatinda dondurur (yoksa None)"""
+    url = os.getenv('DATABASE_URL')
+    if url and url.startswith('postgres://'):
+        url = url.replace('postgres://', 'postgresql://', 1)
+    return url
+
 def init_db(app):
-    """Veritabani baglantisini yapilandirir"""
-    
-    # Ortam degiskenlerinden veya varsayilan degerlerden al
-    DB_HOST = os.getenv('DB_HOST', 'localhost')
-    DB_PORT = os.getenv('DB_PORT', '5432')
-    DB_NAME = os.getenv('DB_NAME', 'portfolyo_db')
-    DB_USER = os.getenv('DB_USER', 'postgres')
-    DB_PASSWORD = os.getenv('DB_PASSWORD', 'password')
-    
-    # PostgreSQL baglanti stringi
-    app.config['SQLALCHEMY_DATABASE_URI'] = (
-        f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
-    )
+    """Veritabani baglantisini yapilandirir. DATABASE_URL yoksa False dondurur."""
+    url = get_database_url()
+    if not url:
+        return False
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_pre_ping': True}
+
     db.init_app(app)
-    
+
     with app.app_context():
         db.create_all()
+
+    return True

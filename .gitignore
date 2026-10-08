@@ -22,10 +22,6 @@ dist/
 .DS_Store
 Thumbs.db
 
-# AWS
-.aws/
-*.pem
-
 # Build
 build/
 *.egg-info/

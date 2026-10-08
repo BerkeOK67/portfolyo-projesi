@@ -9,7 +9,7 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
-    image_url = db.Column(db.String(500))  # S3 gorsel linki
+    image_url = db.Column(db.String(500))  # Gorsel linki
     live_url = db.Column(db.String(500))   # Canli site linki
     github_url = db.Column(db.String(500)) # GitHub repo linki
     technologies = db.Column(db.ARRAY(db.String))  # Kullanilan teknolojiler

@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: portfolyo-projesi
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: gunicorn --chdir backend main:app --bind 0.0.0.0:$PORT --workers 2
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
